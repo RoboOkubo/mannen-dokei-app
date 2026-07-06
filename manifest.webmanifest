@@ -1,0 +1,17 @@
+{
+  "name": "萬年時計 — 二十四節気と日照",
+  "short_name": "萬年時計",
+  "description": "二十四節気・七十二候・旧暦・暦注から、日の出没・月相・不定時法・吉凶時間まで。天文計算にもとづく和暦アプリ。",
+  "lang": "ja",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0f131c",
+  "theme_color": "#0f131c",
+  "icons": [
+    { "src": "pwa-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "pwa-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "pwa-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
