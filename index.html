@@ -789,6 +789,7 @@ button.kh-row:hover{border-color:var(--acc)}
 .edolabel{text-align:center;margin:-4px 0 12px}
 .edolabel .edo-name{display:block;font-family:"Shippori Mincho",serif;font-size:24px;font-weight:700;color:var(--sun-soft);letter-spacing:.06em}
 .edolabel .edo-sub{display:block;font-size:11.5px;color:var(--fg-faint);margin-top:3px;letter-spacing:.02em}
+.edolabel .edo-highlight{color:var(--sun-soft);font-weight:700}
 
 @media (max-width:680px){
   .sd-readouts .v{font-size:18px}
@@ -2430,16 +2431,18 @@ const fmtTime=m=>{if(m==null)return"—";m=((Math.round(m)%1440)+1440)%1440;retu
 /* 江戸の不定時法：昼（日の出→日の入り＝明）と夜（日の入り→日の出＝暮）を各6等分 */
 const EDO_DAY=['明六つ','朝五つ','朝四つ','昼九つ（正午）','昼八つ','昼七つ'];
 const EDO_NIGHT=['暮六つ','夜五つ','夜四つ','暁九つ（真夜中）','暁八つ','暁七つ'];
-function edoHour(min,sunrise,sunset){
-  if(sunrise==null||sunset==null||sunset<=sunrise)return null;
-  const dayLen=sunset-sunrise,nightLen=1440-dayLen;
-  if(min>=sunrise&&min<sunset){
-    const u=dayLen/6,seg=Math.min(5,Math.floor((min-sunrise)/u));
-    return {name:EDO_DAY[seg],period:'明',start:sunrise+seg*u,end:sunrise+(seg+1)*u,seg};
-  }
-  const t=min<sunrise?(min+1440-sunset):(min-sunset);
-  const u=nightLen/6,seg=Math.min(5,Math.floor(t/u));
-  return {name:EDO_NIGHT[seg],period:'暮',start:(sunset+seg*u)%1440,end:(sunset+(seg+1)*u)%1440,seg};
+// 十二支の並び（子=0…亥=11）で、卯(3)＝明六つ　から時計回りに1周
+const EDO_BRANCH_ORDER=[3,4,5,6,7,8,9,10,11,0,1,2]; // 卯辰巳午未申酉戌亥子丑寅
+// 各刻限の範囲＝対応する十二支の一ツ刻（支のはじめ）から次の支のはじめまで。
+// 鐘（明六つ等）の位置そのものは変えず、これまで鐘のあった位置＝各支の半刻（中心）として扱う。
+function edoHour(min,sp){
+  if(!sp||sp.sunrise==null||sp.sunset==null||sp.sunset<=sp.sunrise)return null;
+  const map=_etoMap(sp); if(!map)return null;
+  const p=map.toP(min), bi=Math.floor(p)%12;
+  const orderPos=EDO_BRANCH_ORDER.indexOf(bi);        // 0..11（0=卯＝明六つ）
+  const isDay=orderPos<6, seg=orderPos%6;
+  let start=map.toT(bi), end=map.toT(bi+1); if(end<=start)end+=1440;
+  return {name:isDay?EDO_DAY[seg]:EDO_NIGHT[seg], period:isDay?'明':'暮', start:start%1440, end:end%1440, seg};
 }
 // 十二支マップ（太陽基準・不定時法）：午ノ半刻＝南中, 子ノ半刻＝真夜中, 寅ノ半刻＝日の出, 酉ノ半刻＝日の入
 // 相（phase）p：各支は p∈[i,i+1)、半刻（二ツ/三ツ境界）＝p=i+0.5
@@ -3270,15 +3273,14 @@ function renderSundial(){
 
   const t=sundialMin;
   // 江戸の不定時法（明け六つ等）
-  const edo=edoHour(t,sp.sunrise,sp.sunset);
+  const edo=edoHour(t,sp);
   const edoEl=document.getElementById('sd-edo');
   if(edo){
-    const dayLen=sp.sunset-sp.sunrise, nightLen=1440-dayLen;
-    const unit=edo.period==='明'?dayLen/6:nightLen/6;
+    const unit=((edo.end-edo.start)+1440)%1440;
     const ek=etoKoku(t,sp);
-    edoEl.innerHTML=`<span class="edo-name">${edo.name}</span>`
-      +`<span class="edo-sub">${edo.period}（${edo.period==='明'?'昼':'夜'}）・${fmtTime(edo.start)}〜${fmtTime(edo.end)}　一刻≈${Math.round(unit)}分</span>`
-      +`<span class="edo-sub"><b>${ek.name}</b>（不定時法）・${ek.half?fmtTime(ek.centerMin):`${fmtTime(ek.qStart)}〜${fmtTime(ek.qEnd)}`}</span>`;
+    edoEl.innerHTML=`<span class="edo-name">${ek.name}</span>`
+      +`<span class="edo-sub">${edo.period}（${edo.period==='明'?'昼':'夜'}）・一刻≈${Math.round(unit)}分</span>`
+      +`<span class="edo-sub"><b class="edo-highlight">${edo.name}</b>（不定時法）・${fmtTime(edo.start)}〜${fmtTime(edo.end)}</span>`;
   }else{
     edoEl.innerHTML=`<span class="edo-sub">${sp.polar==='day'?'白夜（不定時法は適用外）':sp.polar==='night'?'極夜（不定時法は適用外）':''}</span>`;
   }
@@ -4627,7 +4629,7 @@ const KOKU_ALL=[...EDO_DAY,...EDO_NIGHT]; // 12種（明六つ…昼九つ…暮
   window._checkKoku=function(){
     if(!sel_.length)return;
     const n=nowInTz(place.tz); const sp=sunTimes(n.Y,n.M,n.D,place.lat,place.lng,place.tz);
-    const eh=edoHour(n.min,sp.sunrise,sp.sunset); if(!eh)return;
+    const eh=edoHour(n.min,sp); if(!eh)return;
     if(!sel_.includes(eh.name))return;
     const occKey=`${n.Y}-${n.M}-${n.D}-${eh.name}`; let last=''; try{last=localStorage.getItem(LAST)||'';}catch(e){}
     if(last===occKey)return;
@@ -4663,7 +4665,7 @@ const KOKU_ALL=[...EDO_DAY,...EDO_NIGHT]; // 12種（明六つ…昼九つ…暮
     const n=nowInTz(place.tz), svg=document.getElementById('mc-svg'), sub=document.getElementById('mc-sub');
     if(!svg)return; const cx=70,cy=70;
     if(kind==='sun'){
-      const sp=sunTimes(n.Y,n.M,n.D,place.lat,place.lng,place.tz), eh=edoHour(n.min,sp.sunrise,sp.sunset);
+      const sp=sunTimes(n.Y,n.M,n.D,place.lat,place.lng,place.tz), eh=edoHour(n.min,sp);
       const R=56; let s=`<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="var(--line2)" stroke-width="2"/>`;
       for(let k=0;k<12;k++){ const a=(-90+k*30)*Math.PI/180,x1=cx+Math.cos(a)*(R-4),y1=cy+Math.sin(a)*(R-4),x2=cx+Math.cos(a)*R,y2=cy+Math.sin(a)*R;
         s+=`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="var(--line2)" stroke-width="1.5"/>`; }
