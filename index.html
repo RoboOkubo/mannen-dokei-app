@@ -87,6 +87,11 @@ select{appearance:none;padding-right:30px}
 .geo-btn{display:inline-flex;align-items:center;gap:7px}
 .geo-btn .dot{width:7px;height:7px;border-radius:50%;background:var(--acc);box-shadow:0 0 8px var(--acc)}
 .loc-note{font-size:10.5px;line-height:1.55;color:var(--fg-faint);margin-top:7px;max-width:560px}
+.loc-geo-detail{font-size:11.5px;line-height:1.6;color:var(--fg-dim);margin-top:6px;
+  background:rgba(243,196,78,.06);border:1px solid var(--line);border-radius:8px;padding:6px 10px;
+  display:inline-flex;gap:10px;flex-wrap:wrap;align-items:center}
+.loc-geo-detail b{color:var(--acc);font-weight:700}
+.loc-geo-detail .mono{color:var(--fg-dim)}
 :focus-visible{outline:2px solid var(--sun);outline-offset:2px}
 
 /* ---------- hero / daylight ---------- */
@@ -979,14 +984,15 @@ button.kh-row:hover{border-color:var(--acc)}
         <span class="dot"></span>現在地
       </button>
     </div>
-    <div class="loc-note">「現在地」を押すと、日の出・日の入り・方位などの計算に位置情報を使います（保存・送信はしません）。都道府県の手動選択でも同じ計算ができます。</div>
+    <div class="loc-note" id="loc-note">「現在地」を押すと、日の出・日の入り・方位などの計算に位置情報を使います（保存・送信はしません）。都道府県の手動選択でも同じ計算ができます。</div>
+    <div class="loc-geo-detail" id="loc-geo-detail" hidden></div>
   </header>
 
   <div class="topbar">
     <div class="bigclock-row">
       <input type="time" step="60" class="bigtime tinput mono" id="bigclock" value="00:00" aria-label="時刻を選択">
       <button class="clkbtn go" id="sky-go">決定</button>
-      <button class="clkbtn" id="sky-now">今すぐ</button>
+      <button class="clkbtn" id="sky-now">現在</button>
     </div>
     <div class="bigdate">
       <button class="daynav" id="day-prev" aria-label="前の日">←</button>
@@ -1062,7 +1068,7 @@ button.kh-row:hover{border-color:var(--acc)}
         <div class="timerow">
           <input type="time" step="60" class="tlabel tinput mono" id="sd-tlabel" value="12:00" aria-label="時刻を選択（タップでピッカー）">
           <input type="range" id="sd-time" min="0" max="1439" step="1" value="720" aria-label="時刻">
-          <button class="nowbtn" id="sd-now">今すぐ</button>
+          <button class="nowbtn" id="sd-now">現在</button>
         </div>
         <div class="kokugen" id="kokugen"></div>
         <div class="sd-readouts">
@@ -1140,7 +1146,7 @@ button.kh-row:hover{border-color:var(--acc)}
         <div class="timerow">
           <input type="time" step="60" class="tlabel tinput mono" id="sc-tlabel" value="00:00" aria-label="時刻を選択（タップでピッカー）">
           <input type="range" id="sc-time" min="0" max="1439" step="1" value="0" aria-label="時刻">
-          <button class="nowbtn" id="sc-now">今すぐ</button>
+          <button class="nowbtn" id="sc-now">現在</button>
         </div>
         <div class="sd-readouts">
           <div><div class="k">時刻</div><div class="v mono acc" id="sc-clk">—</div></div>
@@ -1172,7 +1178,7 @@ button.kh-row:hover{border-color:var(--acc)}
         <div class="timerow">
           <input type="time" step="60" class="tlabel tinput mono" id="kkt-tlabel" value="12:00" aria-label="時刻を選択">
           <input type="range" id="kkt-time" min="0" max="1439" step="1" value="720" aria-label="時刻">
-          <button class="nowbtn" id="kkt-now">今すぐ</button>
+          <button class="nowbtn" id="kkt-now">現在</button>
         </div>
         <div class="kkt-read" id="kkt-read"></div>
         <div class="kkt-gods" id="kkt-gods"></div>
@@ -1262,7 +1268,7 @@ button.kh-row:hover{border-color:var(--acc)}
 
   <footer class="foot">
     <div id="loc-line"></div>
-    <div id="foot-note">太陽黄経が15°進むごとに節気が改まります。<b>昼の長さ</b>の帯は緯度ごとの一年の最短〜最長で正規化。メインの空には<b>太陽の弧</b>に加え、その日の<b>月</b>を実際の高度・方位で描き（当日は現在位置、他日は南中位置）、月の出・月の入りと満ち欠けを示します。<b>月齢</b>は各日の正午（現地）に朔（新月）からの経過日数で算出。日の出・日の入りは大気差を含む近似計算で、実際とは数分前後します。各日には<b>十干十二支（日干支）</b>と<b>八風（はっぷう）</b>を表示します。八風は、立春からの條風（東北）75日間、春分の明庶風（東）・立夏の清明風（東南）・夏至の景風（南）・立秋の涼風（西南）・秋分の閭闔風（西）・立冬の不周風（西北）・冬至の廣莫風（北）が各45日間で、季節の節気と方位に結びついた古来の風です（区間の重なりは新しく始まる風を優先表示。あくまで五穀豊穣や健康の目安で、実際の風は日々・時々で異なります）。各日の<b>メモ</b>はお使いの端末内にのみ保存されます。日時計には江戸の<b>不定時法</b>を表示します。日の出から日の入りまで（明＝昼）と日の入りから日の出まで（暮＝夜）をそれぞれ6等分し、明け六つ（日の出）・明け九つ（正午）・暮れ六つ（日の入り）・暮れ九つ（真夜中）のように数えます（一刻の長さは季節で伸縮します）。<b>土用（どよう）</b>は立春・立夏・立秋・立冬それぞれの直前18日間で、立春前＝冬土用、立夏前＝春土用、立秋前＝夏土用、立冬前＝秋土用です（立の前日が土用明け、立当日は含みません）。各種の<b>吉凶・暦注・吉日</b>は『永代大雑書万暦大成』を参考にした一例で、流派により解釈は異なります。<b>圭表儀</b>の影長は、通常は太陽の幾何学的な高度から計算した理論値です。「大気補正」をオンにすると、気圧・気温を入力して大気差（光が大気で屈折し太陽が実際よりわずかに高く見える効果）を反映した影長に切り替えられます（Bennett, 1982の近似式）。気温は℃・℉・°Ré（レオミュール度）から選べます。「🌤天気から取得」は、選択中の地点の現在の気圧・気温をOpen-Meteo（インターネット通信）から取得します（アプリの他の機能は通信を行いません）。<b>風の記録</b>の「🌬自動取得」は、選んだ日の日の出・日の入り時刻に最も近い時間帯の風向を同じくOpen-Meteoから取得し、16方位に丸めて自動入力します（直近92日前後〜16日先が対象。それより古い日付は気象アーカイブでの取得を試みますが、対応できない場合があります）。いずれも位置情報（選択中の都道府県や現在地）に応じた値を取得します。</div>
+    <div id="foot-note">太陽黄経が15°進むごとに節気が改まります。<b>昼の長さ</b>の帯は緯度ごとの一年の最短〜最長で正規化。メインの空には<b>太陽の弧</b>に加え、その日の<b>月</b>を実際の高度・方位で描き（当日は現在位置、他日は南中位置）、月の出・月の入りと満ち欠けを示します。<b>月齢</b>は各日の正午（現地）に朔（新月）からの経過日数で算出。日の出・日の入りは大気差を含む近似計算で、実際とは数分前後します。各日には<b>十干十二支（日干支）</b>と<b>八風（はっぷう）</b>を表示します。八風は、立春からの條風（東北）75日間、春分の明庶風（東）・立夏の清明風（東南）・夏至の景風（南）・立秋の涼風（西南）・秋分の閭闔風（西）・立冬の不周風（西北）・冬至の廣莫風（北）が各45日間で、季節の節気と方位に結びついた古来の風です（区間の重なりは新しく始まる風を優先表示。あくまで五穀豊穣や健康の目安で、実際の風は日々・時々で異なります）。各日の<b>メモ</b>はお使いの端末内にのみ保存されます。日時計には江戸の<b>不定時法</b>を表示します。日の出から日の入りまで（明＝昼）と日の入りから日の出まで（暮＝夜）をそれぞれ6等分し、明け六つ（日の出）・明け九つ（正午）・暮れ六つ（日の入り）・暮れ九つ（真夜中）のように数えます（一刻の長さは季節で伸縮します）。<b>土用（どよう）</b>は立春・立夏・立秋・立冬それぞれの直前18日間で、立春前＝冬土用、立夏前＝春土用、立秋前＝夏土用、立冬前＝秋土用です（立の前日が土用明け、立当日は含みません）。各種の<b>吉凶・暦注・吉日</b>は『永代大雑書万暦大成』を参考にした一例で、流派により解釈は異なります。<b>圭表儀</b>の影長は、通常は太陽の幾何学的な高度から計算した理論値です。「大気補正」をオンにすると、気圧・気温を入力して大気差（光が大気で屈折し太陽が実際よりわずかに高く見える効果）を反映した影長に切り替えられます（Bennett, 1982の近似式）。気温は℃・℉・°Ré（レオミュール度）から選べます。「🌤天気から取得」は、選択中の地点の現在の気圧・気温をOpen-Meteo（インターネット通信）から取得します（アプリの他の機能は通信を行いません）。<b>風の記録</b>の「🌬自動取得」は、選んだ日の日の出・日の入り時刻に最も近い時間帯の風向を同じくOpen-Meteoから取得し、16方位に丸めて自動入力します（直近92日前後〜16日先が対象。それより古い日付は気象アーカイブでの取得を試みますが、対応できない場合があります）。いずれも位置情報（選択中の都道府県や現在地）に応じた値を取得します。「現在地」ボタンでは、緯度経度から市区町村名を調べるために OpenStreetMap（Nominatim）とも通信します（取得した座標を送信するのみで、保存はしません）。</div>
   </footer>
 </div>
 
@@ -2723,10 +2729,12 @@ function hyakkokuHTML(T){
 }
 function jpEraLunar(Y){ if(Y>=2020)return {n:'令和',y:Y-2018}; if(Y===2019)return {n:'平成',y:31};
   if(Y>=1990)return {n:'平成',y:Y-1988}; if(Y===1989)return {n:'昭和',y:64};
-  if(Y>=1927)return {n:'昭和',y:Y-1925}; if(Y>=1913)return {n:'大正',y:Y-1911}; return {n:'西暦',y:Y}; }
+  if(Y>=1927)return {n:'昭和',y:Y-1925}; if(Y>=1913)return {n:'大正',y:Y-1911};
+  if(Y>=1868)return {n:'明治',y:Y-1867}; return {n:'西暦',y:Y,west:true}; }
 function yearGZ(Y){ const s=((Y-4)%10+10)%10, b=((Y-4)%12+12)%12; return GZ_STEM[s]+GZ_BRANCH[b]; }
 function lunarLine(Y,M,D,tz){ const lu=lunarOf(Y,M,D,tz), ref=lunarYearRef(Y,M,D,tz), era=jpEraLunar(ref);
-  const eraY=era.y===1?'元':kanjiNum(era.y), month=(lu.leap?'閏':'')+WAFU[(lu.lm-1+12)%12];
+  // 明治より前（1868年未満）は元号が無いため、漢数字変換（0-99専用）を使わずそのまま西暦年で表示
+  const eraY=era.west?era.y:(era.y===1?'元':kanjiNum(era.y)), month=(lu.leap?'閏':'')+WAFU[(lu.lm-1+12)%12];
   return `${era.n}${eraY}年（${yearGZ(ref)}）${month}${kanjiNum(lu.ld)}日`; }
 function ehoOf(Y,M,D,tz){ const t=termsForYear(Y).find(x=>x.name==='立春'); const rdi=_dayIdxLocal(t.instant,tz);
   const yr=_dayIdxYMD(Y,M,D)<rdi?Y-1:Y, stem=((yr-4)%10+10)%10;
@@ -3810,7 +3818,7 @@ document.getElementById('day-next').onclick=()=>shiftDay(1);
     ['←','前日へ'],['→','翌日へ'],['↑','前の月へ'],['↓','次の月へ'],
     ['[',']','時計モードを逆送り／順送り'],
     ['1','昼の空'],['2','日時計'],['3','星時計'],['4','吉凶時間'],
-    ['T','今日へ戻る'],['N','「今すぐ」ライブ時刻へ（昼の空）'],
+    ['T','今日へ戻る'],['N','「現在」ライブ時刻へ（昼の空）'],
     ['M','メモ欄へ移動'],['S','本日の吉凶を共有'],['G','設定を開閉'],
     ['?','このショートカット一覧を表示'],['Esc','モーダルを閉じる']
   ];
@@ -4334,6 +4342,26 @@ document.getElementById('sc-now').onclick=()=>{
   render(); renderStarClock();
 };
 
+function showGeoDetail(lat,lng,cityLabel){
+  const el=document.getElementById('loc-geo-detail'); if(!el)return;
+  el.hidden=false;
+  el.innerHTML=`<span>📍 <b>${cityLabel}</b></span><span class="mono">緯度 ${lat.toFixed(4)}° ／ 経度 ${lng.toFixed(4)}°</span>`;
+}
+// 現在地の市区町村名を求める（逆ジオコーディング）。失敗しても都道府県レベルの表示のまま動作継続
+async function fetchCityName(lat,lng){
+  try{
+    const ctrl=new AbortController(); const timer=setTimeout(()=>ctrl.abort(),8000);
+    const res=await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&accept-language=ja&zoom=12`,{signal:ctrl.signal});
+    clearTimeout(timer);
+    if(!res.ok)return null;
+    const j=await res.json();
+    const a=j&&j.address; if(!a)return null;
+    const city=a.city||a.town||a.village||a.city_district||a.suburb||a.county||null;
+    const pref=a.state||'';
+    if(!city)return null;
+    return (pref && !city.startsWith(pref)) ? `${pref}${city}` : city;
+  }catch(e){ return null; }
+}
 document.getElementById('geo').onclick=()=>{
   if(!navigator.geolocation){alert('この環境では現在地を取得できません。都道府県を選んでください。');return;}
   const btn=document.getElementById('geo');btn.textContent='取得中…';
@@ -4351,8 +4379,15 @@ document.getElementById('geo').onclick=()=>{
     if(viewMode==='sun')sundialMin=defaultSundialMin();
     if(viewMode==='star')starTimeMin=defaultStarMin();
     update();
+    // 緯度経度は即座に表示。市区町村名は逆ジオコーディングで後から追記（失敗しても都道府県表示のまま）
+    showGeoDetail(lat,lng,'市区町村を調べています…');
+    fetchCityName(lat,lng).then(city=>{
+      if(city){ showGeoDetail(lat,lng,city); place.name=`現在地（${city}）`; update(); }
+      else{ showGeoDetail(lat,lng,prefName||'市区町村を特定できませんでした'); }
+    });
   },err=>{
     btn.innerHTML='<span class="dot"></span>現在地';
+    const gd=document.getElementById('loc-geo-detail'); if(gd)gd.hidden=true;
     let msg='現在地を取得できませんでした。都道府県を選んでください。\n\n';
     if(location.protocol==='file:'){
       msg+='このページを直接ファイルとして開いている場合、ブラウザの仕様で現在地取得がブロックされることがあります。\n'
@@ -4456,7 +4491,7 @@ document.getElementById('geo').onclick=()=>{
     <p class="help-note">本アプリの吉凶・暦注・方位などは、伝統的な文化・慣習にもとづく<b>参考情報</b>であり、科学的な効果や結果を保証するものではありません。重要な判断は、ご自身の責任においてお願いいたします。</p>
 
     <h3>プライバシー</h3>
-    <p>メモ・お気に入り・設定は、すべてお使いの端末内にのみ保存され、外部に送信されません。天気（気圧・気温・風向）の取得時のみ、選択地点の位置情報を気象データ提供元へ送信します。</p>
+    <p>メモ・お気に入り・設定は、すべてお使いの端末内にのみ保存され、外部に送信されません。天気（気圧・気温・風向）の取得時のみ、選択地点の位置情報を気象データ提供元（Open-Meteo）へ送信します。「現在地」ボタンでは、市区町村名を調べるためにOpenStreetMap（Nominatim）にも座標を送信します。いずれも保存は行われません。</p>
     <p><a href="https://robookubo.github.io/mannen-dokei-privacy/" target="_blank" rel="noopener" style="color:var(--acc)">プライバシーポリシーを開く ▸</a></p>
 
     <h3>お問い合わせ</h3>
