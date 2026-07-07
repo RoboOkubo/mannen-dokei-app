@@ -384,6 +384,7 @@ select{appearance:none;padding-right:30px}
 .cell .gz{font-family:"Shippori Mincho",serif;font-size:11px;color:var(--fg-faint);
   line-height:1.1;margin-top:1px;letter-spacing:.06em}
 .cell .gz.koshin{color:var(--sun);font-weight:700}
+.cell .c-roku{margin-left:6px;font-family:"Shippori Mincho",serif;font-size:11px;font-weight:700;letter-spacing:.02em}
 .cell .wind{margin-top:2px;font-size:11px;font-weight:700;line-height:1.15;letter-spacing:.02em}
 .cell .doyo{margin-top:2px;font-size:10px;font-weight:700;line-height:1.1;letter-spacing:.02em;
   color:#caa35a;border-left:2px solid #caa35a;padding-left:4px}
@@ -568,6 +569,7 @@ select{appearance:none;padding-right:30px}
   .cell{min-height:102px;padding:5px 6px 14px}
   .cell .sekki{font-size:11px}
   .cell .gz{font-size:10px}.cell .wind{font-size:10px}
+  .cell .c-roku{font-size:9.5px;margin-left:4px}
   .season-rail{grid-template-columns:repeat(2,1fr)}
   .daylight-stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 10px}
   .daylight-stats .v{font-size:19px}
@@ -2027,6 +2029,7 @@ function lunarOf(Y,M,D,tz){
   return null;
 }
 const ROKUYO=['大安','赤口','先勝','友引','先負','仏滅'];
+const ROKUYO_COL={大安:'#e3bd72',友引:'#7fa8e0',先勝:'#7fc98f',先負:'#9aa3b4',赤口:'#d0594a',仏滅:'#8a8f9c'};
 function rokuyoOf(Y,M,D,tz){ const l=lunarOf(Y,M,D,tz); if(!l)return null; return ROKUYO[((l.lm+l.ld)%6+6)%6]; }
 
 /* ====================== 吉凶日（干支・旧暦・季節ベース）====================== */
@@ -2897,7 +2900,9 @@ function render(){
         `<span class="mage">${mi.age.toFixed(1)}</span>`+
         (lecl?`<span class="mevt" style="color:#e0594a">月食</span>`:(evt?`<span class="mevt">${evt}</span>`:''))+
       `</div></div>`+
-      `<div class="gz${koshin?' koshin':''}"${gzStyle}>${gz}${leapTag}</div>`+
+      `<div class="gz${koshin?' koshin':''}"${gzStyle}>${gz}${leapTag}`+
+        (am.rokuyo?`<span class="c-roku" style="color:${ROKUYO_COL[am.rokuyo]||'var(--fg-dim)'}">${am.rokuyo}</span>`:'')+
+      `</div>`+
       (tm?`<div class="sekki">${tm.name}</div>`:'')+
       (doyo?`<div class="doyo">${doyo.name}</div>`:'')+
       `<div class="cmarks">`+
@@ -3335,7 +3340,8 @@ function renderSundial(){
       <stop offset="0" stop-color="#1a2233"/><stop offset="1" stop-color="#11151f"/>
     </radialGradient>
     <radialGradient id="sund" cx="0.5" cy="0.5" r="0.5">
-      <stop offset="0" stop-color="#fff4d6"/><stop offset="0.45" stop-color="#f3c44e"/>
+      <stop offset="0" stop-color="#fffaf0"/><stop offset="0.4" stop-color="#f9d878"/>
+      <stop offset="0.72" stop-color="#f3c44e" stop-opacity="0.5"/>
       <stop offset="1" stop-color="#f3c44e" stop-opacity="0"/></radialGradient>
   </defs>`;
   s+=`<circle cx="${cx}" cy="${cy}" r="${R+30}" fill="none"/>`;
@@ -3449,9 +3455,9 @@ function renderSundial(){
     s+=`<line x1="${cx}" y1="${cy}" x2="${hx.toFixed(1)}" y2="${hy.toFixed(1)}" stroke="${acc}" stroke-width="9" stroke-linecap="round" opacity="0.16"/>`;
     // sun on the compass ring at its azimuth, brightness ~ altitude
     const [sx,sy]=ptR(Az,R+16);
-    const glow=6+10*Math.max(0,Math.sin(alt*D2R));
+    const glow=8+13*Math.max(0,Math.sin(alt*D2R));
     s+=`<circle cx="${sx.toFixed(1)}" cy="${sy.toFixed(1)}" r="${glow.toFixed(1)}" fill="url(#sund)"/>`;
-    s+=`<circle cx="${sx.toFixed(1)}" cy="${sy.toFixed(1)}" r="5" fill="#f3c44e"/>`;
+    s+=`<circle cx="${sx.toFixed(1)}" cy="${sy.toFixed(1)}" r="5" fill="#fbe08a"/>`;
   }else{
     s+=`<text x="${cx}" y="${cy-4}" fill="#9aa3b4" font-size="14" text-anchor="middle">夜</text>`;
     s+=`<text x="${cx}" y="${cy+16}" fill="#5d6678" font-size="11" text-anchor="middle">太陽は地平線の下</text>`;
