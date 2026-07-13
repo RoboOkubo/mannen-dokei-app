@@ -187,7 +187,7 @@ select{appearance:none;padding-right:30px}
 .set-saved{margin-top:8px;font-size:11px;color:var(--fg-faint)}
 .finder-open{background:linear-gradient(90deg,rgba(224,184,78,.16),rgba(207,149,64,.16));
   border:1px solid #cf9540;color:#e3bd72;border-radius:9px;padding:6px 12px;font-size:13px;font-weight:700;cursor:pointer}
-.finder-bar{display:flex;justify-content:center;margin:4px 0 12px}
+.finder-bar{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:4px 0 12px}
 .finder-bar .finder-open{padding:9px 22px;font-size:15px;border-radius:11px}
 .finder-open:hover{background:linear-gradient(90deg,rgba(224,184,78,.28),rgba(207,149,64,.28))}
 .finder-modal{position:fixed;inset:0;z-index:80;background:rgba(8,11,18,.72);backdrop-filter:blur(3px);
@@ -228,7 +228,16 @@ select{appearance:none;padding-right:30px}
   padding:1px 9px;border-radius:6px}
 .fr-tag{font-size:11px;color:#7fc28f;border:1px solid rgba(111,192,129,.4);border-radius:5px;padding:0 6px}
 .fr-tag.warn{color:#cf9c6a;border-color:rgba(207,156,106,.4)}
-.finder-empty{color:var(--fg-faint);font-size:12px;text-align:center;padding:18px}
+.finder-empty{color:var(--fg-faint);font-size:12px;text-align:center;padding:18px;line-height:1.7}
+.kw-inputrow{display:flex;gap:7px;margin-bottom:12px}
+.kw-input{flex:1;min-width:0;background:rgba(255,255,255,.04);border:1px solid var(--line);color:var(--fg);
+  border-radius:9px;padding:9px 12px;font-size:15px;font-family:"Shippori Mincho",serif}
+.kw-input:focus{outline:none;border-color:var(--acc)}
+.kw-input::placeholder{color:var(--fg-faint)}
+.kw-go{background:linear-gradient(90deg,rgba(224,184,78,.16),rgba(207,149,64,.16));border:1px solid #cf9540;
+  color:#e3bd72;border-radius:9px;padding:0 18px;font-size:14px;font-weight:700;cursor:pointer;
+  font-family:"Shippori Mincho",serif;white-space:nowrap}
+.kw-go:hover{background:linear-gradient(90deg,rgba(224,184,78,.28),rgba(207,149,64,.28))}
 .term-kou{margin-top:9px;display:flex;align-items:baseline;gap:8px;justify-content:center;flex-wrap:wrap}
 .term-kou .kou-lab{font-size:10px;letter-spacing:.12em;color:var(--fg-faint);border:1px solid var(--line);border-radius:4px;padding:1px 6px}
 .term-kou b{font-family:"Shippori Mincho",serif;font-size:18px;color:#cdbf8f}
@@ -448,6 +457,32 @@ select{appearance:none;padding-right:30px}
 .dayinfo .di-doyo small{font-size:11px;color:var(--fg-faint)}
 .dayinfo .di-wind b{font-family:"Shippori Mincho",serif;font-size:18px;font-weight:700;color:var(--wc,var(--fg))}
 .dayinfo .di-none{color:var(--fg-faint)}
+.tide{margin-top:22px;border:1px solid var(--line);border-radius:12px;padding:14px 16px 16px;background:rgba(255,255,255,.02)}
+.tide:empty{display:none}
+.tide-head{display:flex;align-items:center;gap:10px 12px;flex-wrap:wrap;margin-bottom:10px}
+.tide-title{font-family:"Shippori Mincho",serif;font-size:15px;color:var(--fg);font-weight:700;letter-spacing:.04em}
+.tide-port{background:rgba(255,255,255,.04);border:1px solid var(--line);color:var(--fg);border-radius:8px;
+  padding:5px 10px;font-size:13px;font-family:"Shippori Mincho",serif}
+.tide-port:focus{outline:none;border-color:var(--acc)}
+.tide-shio{font-family:"Shippori Mincho",serif;font-size:13px;font-weight:700;color:#8fc0e6;
+  border:1px solid rgba(143,192,230,.42);background:rgba(143,192,230,.1);border-radius:6px;padding:2px 11px}
+.tide-hilo{display:flex;flex-wrap:wrap;gap:5px 16px;font-size:13px;color:var(--fg-dim);margin-bottom:14px}
+.tide-hilo span{display:inline-flex;align-items:baseline;gap:5px}
+.tide-hilo b{font-family:"Shippori Mincho",serif;font-weight:700}
+.tide-hilo .th-hi{color:#e7a94e} .tide-hilo .th-lo{color:#6fa8d0}
+.tide-chart{margin-top:6px}
+.tide-chart svg{width:100%;height:auto;display:block}
+.tc-grid{stroke:var(--line);stroke-width:1}
+.tc-axis{stroke:var(--fg-faint);stroke-width:1}
+.tc-curve{fill:none;stroke:#6ea6cf;stroke-width:2}
+.tc-fill{fill:rgba(110,166,207,.10)}
+.tc-lbl{fill:var(--fg-faint);font-size:9px;font-family:ui-monospace,monospace}
+.tc-unit{fill:var(--fg-dim);font-size:10.5px;font-family:"Shippori Mincho",serif}
+.tc-val{fill:var(--fg-dim);font-size:8.5px;font-family:ui-monospace,monospace;text-anchor:middle}
+.tc-dot{fill:#6ea6cf}
+.tc-hi{fill:#e7a94e}
+.tc-lo{fill:#6fa8d0}
+.tide-note{font-size:11px;color:var(--fg-faint);margin-top:11px;line-height:1.65}
 .memo{margin-top:10px}
 .memo-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:10px;flex-wrap:wrap}
 .memo-ctl{display:flex;align-items:center;gap:10px}
@@ -961,6 +996,20 @@ button.kh-row:hover{border-color:var(--acc)}
     </div>
   </div>
 
+  <div id="kw-modal" class="finder-modal" hidden>
+    <div class="finder-card">
+      <div class="finder-head"><span>🔤 キーワードで日を探す</span><button class="finder-x" id="kw-close" aria-label="閉じる">×</button></div>
+      <div class="finder-sub">暦注・吉凶日・六曜・干支・雑節などの名前を入力すると、選択日から先の該当日を探します。</div>
+      <div class="kw-inputrow">
+        <input type="text" id="kw-input" class="kw-input" placeholder="例：一粒万倍日 / 大安 / 甲子 / 狼藉日" autocomplete="off" spellcheck="false">
+        <button class="kw-go" id="kw-go" type="button">探す</button>
+      </div>
+      <div class="finder-acts" id="kw-chips"></div>
+      <div class="finder-sub" id="kw-sub" style="margin:2px 0 10px"></div>
+      <div class="finder-results" id="kw-results"></div>
+    </div>
+  </div>
+
   <div id="sekki-modal" class="finder-modal" hidden>
     <div class="finder-card">
       <div class="finder-head"><span>二十四節気 と 七十二候　<b id="sekki-year" style="color:var(--fg)"></b></span><button class="finder-x" id="sekki-close" aria-label="閉じる">×</button></div>
@@ -1166,6 +1215,7 @@ button.kh-row:hover{border-color:var(--acc)}
           </div>
         </div>
         <div class="dialwrap"><svg id="stardial" viewBox="0 0 380 400" role="img" aria-label="星時計（北斗七星と北極星）"></svg></div>
+        <div id="starcompass"></div><!-- 北さがしコンパス（テスト機能・starcompass.js） -->
         <div class="timerow">
           <input type="time" step="60" class="tlabel tinput mono" id="sc-tlabel" value="00:00" aria-label="時刻を選択（タップでピッカー）">
           <input type="range" id="sc-time" min="0" max="1439" step="1" value="0" aria-label="時刻">
@@ -1220,6 +1270,7 @@ button.kh-row:hover{border-color:var(--acc)}
 
   <div class="finder-bar v-koyomi">
     <button class="finder-open" id="finder-open">🔍 吉日を探す</button>
+    <button class="finder-open" id="kw-open">🔤 キーワード</button>
   </div>
 
   <div class="calbar v-koyomi">
@@ -1241,6 +1292,7 @@ button.kh-row:hover{border-color:var(--acc)}
   <div class="grid v-koyomi" id="grid"></div>
 
   <div class="dayinfo v-koyomi" id="dayinfo"></div>
+  <div class="tide v-koyomi" id="tide"></div>
   <div class="windrec v-kiroku" id="windrec"></div>
   <div class="memo-wrap v-kiroku">
     <div class="memo">
@@ -2507,6 +2559,55 @@ const fmtDur=m=>{m=Math.round(m);return Math.floor(m/60)+"時間"+pad(m%60).repl
 function setSeason(s){document.body.dataset.season=s;}
 
 /* ====================== sky figure ====================== */
+// ===== 昼の空：時刻（＝太陽高度）で移り変わる背景 =====
+// 太陽高度で駆動するため、季節・緯度によっても正しく変化する。
+// 夜 → 天文薄明 → 航海薄明 → 市民薄明 → 日の出/入 → 黄金時 → 昼
+const _SKY_KF_DAWN=[  // [太陽高度°, 上, 中, 下]
+  [-90,'#04060b','#080d18','#0f1626'],
+  [-18,'#05070e','#0a1020','#121a2c'],
+  [-12,'#070c18','#101a33','#1d2744'],
+  [ -6,'#0d1730','#22305a','#42406c'],
+  [-0.833,'#1b2f57','#4d5a86','#b06a5e'],
+  [  6,'#24477a','#7594b8','#dda06a'],
+  [ 20,'#1e3c66','#5382ab','#a3c0d4'],
+  [ 60,'#17335e','#4576a5','#accada']
+];
+const _SKY_KF_DUSK=[
+  [-90,'#04060b','#080d18','#0f1626'],
+  [-18,'#05070e','#0a1020','#131a2b'],
+  [-12,'#080b18','#121832','#241f42'],
+  [ -6,'#101530','#2b2b58','#5c3a63'],
+  [-0.833,'#1d2b4f','#5a5480','#c05c40'],
+  [  6,'#26406b','#8a8aa8','#e08a55'],
+  [ 20,'#1e3c66','#5382ab','#a3c0d4'],
+  [ 60,'#17335e','#4576a5','#accada']
+];
+function _hex2rgb(h){return [parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)];}
+function _rgb2hex(c){return '#'+c.map(v=>Math.max(0,Math.min(255,Math.round(v))).toString(16).padStart(2,'0')).join('');}
+function _mix(a,b,t){const A=_hex2rgb(a),B=_hex2rgb(b);return _rgb2hex([0,1,2].map(i=>A[i]+(B[i]-A[i])*t));}
+function _skyPalette(alt,isDawn){
+  const KF=isDawn?_SKY_KF_DAWN:_SKY_KF_DUSK;
+  if(alt<=KF[0][0])return KF[0].slice(1);
+  if(alt>=KF[KF.length-1][0])return KF[KF.length-1].slice(1);
+  for(let i=0;i<KF.length-1;i++){
+    const a=KF[i],b=KF[i+1];
+    if(alt>=a[0]&&alt<=b[0]){
+      let t=(alt-a[0])/(b[0]-a[0]);
+      t=t*t*(3-2*t);                       // smoothstep：継ぎ目を滑らかに
+      return [1,2,3].map(k=>_mix(a[k],b[k],t));
+    }
+  }
+  return KF[KF.length-1].slice(1);
+}
+// 夜の度合い（0=明るい, 1=完全な夜）：星を出す量に使う
+function _nightF(alt){return Math.max(0,Math.min(1,(-alt-8)/10));}
+// 地平線の焼け（朝焼け・夕焼け）の強さ：日の出/入の前後で最大
+function _glowF(alt){return Math.max(0,Math.min(1,1-Math.abs(alt+1)/12));}
+// 星（決まった配置。ちらつかないよう固定）
+const _STARS=[[24,26,.9],[57,52,.6],[95,20,1],[131,60,.7],[168,32,.85],[204,72,.6],
+  [241,28,.95],[276,58,.7],[300,96,.6],[41,88,.7],[78,112,.55],[152,96,.8],
+  [188,124,.5],[228,104,.65],[264,132,.5],[112,140,.45]];
+
 function drawSky(st,season,isToday,nowMin,latLen,moon,lat){
   const svg=document.getElementById('sky');
   const W=320,H=224,hy=182,x0=28,x1=292,span=x1-x0;
@@ -2536,7 +2637,7 @@ function drawSky(st,season,isToday,nowMin,latLen,moon,lat){
     const alt=asin(sin(lat)*sin(st.decl)+cos(lat)*cos(st.decl)*cos(H));
     const az=(atan2(-cos(st.decl)*sin(H), sin(st.decl)*cos(lat)-cos(st.decl)*sin(lat)*cos(H))+360)%360;
     return {alt,az}; };
-  let path, sx, sy, riseX=x0, setX=x1;
+  let path, sx, sy, riseX=x0, setX=x1, sunAlt=null, isDawn=true;
   if(!st.polar && st.sunrise!=null && st.sunset!=null && st.decl!=null && lat!=null){
     // 日の出→日の入を実際の方位・高度でサンプリング（季節で弧の左右位置と高さが変わる）
     path='';
@@ -2545,11 +2646,23 @@ function drawSky(st,season,isToday,nowMin,latLen,moon,lat){
     riseX=skyX(sunPos(st.sunrise).az); setX=skyX(sunPos(st.sunset).az);
     const curT=(nowMin!=null)?nowMin:st.noon, cp=sunPos(curT);
     sx=skyX(cp.az); sy=belowHorizon?hy:skyY(Math.max(0,cp.alt));
+    sunAlt=cp.alt; isDawn=(curT<=st.noon);
   } else {
     path=`M ${x0} ${hy}`;
     for(let i=1;i<=48;i++){const p=i/48;path+=` L ${(x0+span*p).toFixed(1)} ${yAt(p).toFixed(1)}`;}
     sx=x0+span*0.5; sy=belowHorizon?hy:yAt(0.5);
+    sunAlt=(st.polar==='night')?-20:(st.polar==='day'?15:30);
   }
+  // 背景（朝・昼・夕・夜）
+  const pal=_skyPalette(sunAlt,isDawn);
+  const skyTop=pal[0], skyMid=pal[1], skyBot=_mix(pal[2],accVar,0.12);  // 下端に季節色をわずかに含ませる
+  const nightF=_nightF(sunAlt), glowF=_glowF(sunAlt);
+  const dayF=Math.max(0,Math.min(1,(sunAlt+6)/18));   // 空の明るさ（0=夜, 1=昼）
+  const glowCol=isDawn?'#f0a878':'#e8724a';
+  const starsSVG=nightF<=0.02?'':_STARS.map(([px,py,op])=>
+    `<circle cx="${px}" cy="${py}" r="${(op>0.8?0.9:0.65).toFixed(2)}" fill="#e8ecf7" opacity="${(op*nightF*0.9).toFixed(3)}"/>`).join('');
+  const glowSVG=glowF<=0.02?'':
+    `<ellipse cx="${sx.toFixed(1)}" cy="${hy}" rx="118" ry="58" fill="url(#glow-g)" opacity="${(glowF*0.55).toFixed(3)}"/>`;
 
   // ---- moon overlay (true path + phase glyph + rise/set) ----
   let moonPath='',moonMark='',moonLabels='',eclipseMark='',eclipseLabel='';
@@ -2563,7 +2676,7 @@ function drawSky(st,season,isToday,nowMin,latLen,moon,lat){
       else d+=` L ${X.toFixed(1)} ${Y.toFixed(1)}`;
       lastx=X;
     }
-    if(d)moonPath=`<path d="${d}" fill="none" stroke="#aeb6cc" stroke-opacity="0.4" stroke-width="1" stroke-dasharray="1 3.6" stroke-linecap="round"/>`;
+    if(d)moonPath=`<path d="${d}" fill="none" stroke="${_mix('#aeb6cc','#2f3d55',dayF)}" stroke-opacity="${(0.4+0.28*dayF).toFixed(2)}" stroke-width="1" stroke-dasharray="1 3.6" stroke-linecap="round"/>`;
     if(moon.eclipse && showSun){
       // 太陽に月が重なる＝日食：太陽の上に暗い月の円盤を少しずらして描く
       const ex=sx+moon.eclipse.ox, ey=sy+moon.eclipse.oy;
@@ -2592,10 +2705,15 @@ function drawSky(st,season,isToday,nowMin,latLen,moon,lat){
   svg.innerHTML=`
    <defs>
      <linearGradient id="sky-g" x1="0" y1="0" x2="0" y2="1">
-       <stop offset="0" stop-color="#0e1422"/>
-       <stop offset="0.55" stop-color="#1b2740"/>
-       <stop offset="1" stop-color="${accVar}" stop-opacity="0.42"/>
+       <stop offset="0" stop-color="${skyTop}"/>
+       <stop offset="0.55" stop-color="${skyMid}"/>
+       <stop offset="1" stop-color="${skyBot}"/>
      </linearGradient>
+     <radialGradient id="glow-g" cx="0.5" cy="0.5" r="0.5">
+       <stop offset="0" stop-color="${glowCol}" stop-opacity="0.85"/>
+       <stop offset="0.5" stop-color="${glowCol}" stop-opacity="0.28"/>
+       <stop offset="1" stop-color="${glowCol}" stop-opacity="0"/>
+     </radialGradient>
      <radialGradient id="sun-g" cx="0.5" cy="0.5" r="0.5">
        <stop offset="0" stop-color="#fff4d6"/>
        <stop offset="0.4" stop-color="#f3c44e"/>
@@ -2605,9 +2723,14 @@ function drawSky(st,season,isToday,nowMin,latLen,moon,lat){
        <stop offset="0" stop-color="#cdd3e6" stop-opacity="0.5"/>
        <stop offset="1" stop-color="#cdd3e6" stop-opacity="0"/>
      </radialGradient>
+     <clipPath id="skyclip"><rect x="0" y="0" width="${W}" height="${hy}"/></clipPath>
      <clipPath id="under"><path d="${path} Z"/></clipPath>
    </defs>
    <rect x="0" y="0" width="${W}" height="${hy}" fill="url(#sky-g)"/>
+   <g clip-path="url(#skyclip)">
+     ${starsSVG}
+     ${glowSVG}
+   </g>
    <g clip-path="url(#under)">
      <rect x="0" y="0" width="${W}" height="${hy}" fill="${accVar}" opacity="0.10"/>
    </g>
@@ -3660,7 +3783,8 @@ function renderStarClock(){
 
 /* ====================== view switch + update ====================== */
 const MODES=['sky','sun','star','kkt'];
-function update(){ render(); if(viewMode==='sun') renderSundial(); else if(viewMode==='star') renderStarClock(); else if(viewMode==='kkt') renderKikkyo(); updateWindrec(); }
+function update(){ render(); if(viewMode==='sun') renderSundial(); else if(viewMode==='star') renderStarClock(); else if(viewMode==='kkt') renderKikkyo(); updateWindrec(); if(typeof renderTide==='function') renderTide(); }
+
 function setMode(mode){
   viewMode=mode;
   document.getElementById('panel-sky').hidden=(mode!=='sky');
@@ -3850,6 +3974,8 @@ document.getElementById('day-next').onclick=()=>shiftDay(1);
     if(save){ try{localStorage.setItem('koyomi-view',v);}catch(e){} }
     // 天（時計）に切り替えたときは、非表示中に崩れないよう再描画
     if(v==='sora'){ try{ if(viewMode==='sun')renderSundial(); else if(viewMode==='star')renderStarClock(); else if(viewMode==='kkt')renderKikkyo(); else render(); }catch(e){} }
+    // 暦に戻ったときは、非表示中に飛ばした潮汐を描き直す
+    if(v==='koyomi'){ try{ if(typeof renderTide==='function')renderTide(); }catch(e){} }
     window.scrollTo({top:0,behavior:'smooth'});
   }
   tabs.querySelectorAll('.vtab').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.v,true)));
@@ -4135,6 +4261,12 @@ document.getElementById('favlist-grid').addEventListener('click',e=>{
   document.addEventListener('click',e=>{ if(!sp.hidden && !sp.contains(e.target) && !gb.contains(e.target)) sp.hidden=true; });
 })();
 
+// モーダル共通：閉じるボタン＋背景クリックで閉じる
+function bindModalClose(modal,close){
+  if(close)close.addEventListener('click',()=>{ modal.hidden=true; });
+  if(modal)modal.addEventListener('click',e=>{ if(e.target===modal)modal.hidden=true; });
+}
+
 // ① 吉日ファインダー
 (function(){
   const open=document.getElementById('finder-open'), modal=document.getElementById('finder-modal'),
@@ -4176,8 +4308,77 @@ document.getElementById('favlist-grid').addEventListener('click',e=>{
     update(); modal.hidden=true; };
   actsEl.onclick=e=>{ const b=e.target.closest('button[data-i]'); if(b)search(+b.dataset.i); };
   open.addEventListener('click',()=>{ modal.hidden=false; chips(); if(curAct!=null)search(curAct); else resEl.innerHTML='<div class="finder-empty">上から「やりたいこと」を選んでください</div>'; });
-  close.addEventListener('click',()=>{ modal.hidden=true; });
-  modal.addEventListener('click',e=>{ if(e.target===modal)modal.hidden=true; });
+  bindModalClose(modal,close);
+})();
+
+// ①' キーワード検索（暦注・吉凶日・六曜・干支・雑節などの名前で該当日を探す）
+(function(){
+  const open=document.getElementById('kw-open'), modal=document.getElementById('kw-modal'),
+        close=document.getElementById('kw-close'), input=document.getElementById('kw-input'),
+        go=document.getElementById('kw-go'), chipsEl=document.getElementById('kw-chips'),
+        subEl=document.getElementById('kw-sub'), resEl=document.getElementById('kw-results');
+  if(!open||!modal)return;
+  const CHIPS=['一粒万倍日','天赦日','大明日','母倉日','神吉日','大安','仏滅','甲子','八専','十方暮','三伏','社日'];
+  const CLR={good:['#e3bd72','rgba(224,184,78,.14)','#d9c34e'],
+             bad :['#c391da','rgba(176,111,208,.15)','#b06fd0'],
+             hei :['#9aa3b4','rgba(255,255,255,.05)','#2a3242']};
+  const DAYS=800, MAX=60;
+  // その日の検索対象ラベルを {t:表示名, k:good|bad|hei} で集める
+  function labelsOf(Y,M,D){
+    const a=almanacDay(Y,M,D,place.tz), out=[];
+    (a.kichi||[]).forEach(x=> out.push({t:x.name, k:x.good?'good':'bad'}));
+    (a.other||[]).forEach(x=> out.push({t:x.name, k:x.good?'good':'bad'}));
+    (a.zassetsu||[]).forEach(z=> out.push({t:z, k:'hei'}));
+    if(a.rokuyo)  out.push({t:a.rokuyo,  k:'hei'});
+    if(a.gzLabel) out.push({t:a.gzLabel, k:'hei'});
+    out.push({t:ganzhiStr(Y,M,D), k:'hei'});
+    if(a.holiday) out.push({t:(a.holiday.name||a.holiday), k:'hei'});
+    return out;
+  }
+  function search(kwRaw){
+    const kw=(kwRaw||'').trim();
+    if(!kw){ subEl.textContent=''; resEl.innerHTML='<div class="finder-empty">調べたい名前を入力してください。</div>'; return; }
+    const start=new Date(sel.Y,sel.M-1,sel.D), rows=[];
+    for(let i=0;i<DAYS && rows.length<MAX;i++){
+      const d=new Date(start); d.setDate(start.getDate()+i);
+      const Y=d.getFullYear(),M=d.getMonth()+1,Dd=d.getDate();
+      const hit=labelsOf(Y,M,Dd).filter(x=> x.t.indexOf(kw)>=0);
+      if(hit.length){
+        const seen=new Set(), names=[]; let kind='hei';
+        hit.forEach(h=>{ if(!seen.has(h.t)){ seen.add(h.t); names.push(h.t); }
+          if(h.k==='bad')kind='bad'; else if(h.k==='good'&&kind!=='bad')kind='good'; });
+        rows.push({Y,M,D:Dd,dow:dowOf(Y,M,Dd),names,kind});
+      }
+    }
+    subEl.textContent=`「${kw}」に該当する日（選択日 ${sel.Y}/${sel.M}/${sel.D} から先、最大${DAYS}日・${MAX}件まで）`;
+    if(!rows.length){
+      let hint='該当する日が見つかりませんでした。名前の一部（例「一粒」「大安」）でもお試しください。';
+      if(/狼藉|大禍|滅門/.test(kw) && (typeof userBirthBranch==='undefined'||userBirthBranch==null))
+        hint='該当する日が見つかりませんでした。<br>狼藉日・大禍日・滅門日は<b>生年による凶日</b>のため、⚙設定で誕生日を登録すると表示されます。';
+      resEl.innerHTML='<div class="finder-empty">'+hint+'</div>'; return;
+    }
+    resEl.innerHTML=rows.map((r,idx)=>{
+      const c=CLR[r.kind]||CLR.hei, label=r.names.join('・');
+      return `<div class="fr-row" data-y="${r.Y}" data-m="${r.M}" data-d="${r.D}">`
+        +`<span class="fr-rank">${idx+1}</span>`
+        +`<span class="fr-date">${r.M}月${r.D}日</span>`
+        +`<span class="fr-dow" style="color:${DOW_COL[r.dow]}">${DOW_K[r.dow]}</span>`
+        +`<span class="fr-badge" style="color:${c[0]};background:${c[1]};border:1px solid ${c[2]}">${label}</span>`
+        +`</div>`;
+    }).join('');
+  }
+  function chips(){ chipsEl.innerHTML=CHIPS.map(c=>`<button data-kw="${c}">${c}</button>`).join(''); }
+  chipsEl.onclick=e=>{ const b=e.target.closest('button[data-kw]'); if(!b)return; input.value=b.dataset.kw; search(b.dataset.kw); };
+  resEl.onclick=e=>{ const row=e.target.closest('.fr-row'); if(!row)return;
+    sel={Y:+row.dataset.y,M:+row.dataset.m,D:+row.dataset.d}; view={Y:sel.Y,M:sel.M};
+    update(); modal.hidden=true; };
+  go.addEventListener('click',()=>search(input.value));
+  input.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); search(input.value); } });
+  open.addEventListener('click',()=>{ modal.hidden=false; chips();
+    if(input.value.trim())search(input.value);
+    else { subEl.textContent=''; resEl.innerHTML='<div class="finder-empty">調べたい名前を入力するか、下の候補から選んでください。</div>'; }
+    setTimeout(()=>input.focus(),50); });
+  bindModalClose(modal,close);
 })();
 
 // day navigation (shared by sundial + star clock)
@@ -4510,8 +4711,7 @@ document.getElementById('geo').onclick=()=>{
   `;
   body.innerHTML=HTML;
   btn.addEventListener('click',()=>{ modal.hidden=false; });
-  close.addEventListener('click',()=>{ modal.hidden=true; });
-  modal.addEventListener('click',e=>{ if(e.target===modal)modal.hidden=true; });
+  bindModalClose(modal,close);
 })();
 /* ====================== このアプリについて ====================== */
 (function(){
@@ -4544,8 +4744,7 @@ document.getElementById('geo').onclick=()=>{
     <p><a href="mailto:sagishimado@gmail.com" style="color:var(--acc)">sagishimado@gmail.com</a></p>
   `;
   btn.addEventListener('click',()=>{ modal.hidden=false; });
-  close.addEventListener('click',()=>{ modal.hidden=true; });
-  modal.addEventListener('click',e=>{ if(e.target===modal)modal.hidden=true; });
+  bindModalClose(modal,close);
 })();
 (function(){
   let shown=false;
@@ -4874,5 +5073,8 @@ initWindrec();
 render();
 updateWindrec();
 </script>
+<script src="tide.js" defer></script>
+<script src="sekki.js" defer></script><!-- 二十四節気の解説（タップで表示） -->
+<script src="starcompass.js" defer></script><!-- 北さがしコンパス（テスト機能・不採用なら本行とstarcompass divを削除） -->
 </body>
 </html>
