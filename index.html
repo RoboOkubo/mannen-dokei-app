@@ -852,6 +852,90 @@ button.kh-row:hover{border-color:var(--acc)}
   .sd-readouts .v{font-size:18px}
 }
 </style>
+<style id="roho-style">
+/* ====== 制作者について（暦法序・開発者） ====== */
+.roho-tabs{display:flex;gap:6px;margin:2px 0 14px;border-bottom:1px solid var(--line);padding-bottom:10px}
+.roho-tab{flex:1;padding:8px 4px;border-radius:9px;border:1px solid var(--line);
+  background:rgba(255,255,255,.02);color:var(--fg-dim);font-family:"Shippori Mincho",serif;
+  font-size:13.5px;letter-spacing:.08em;cursor:pointer;transition:.15s}
+.roho-tab:hover{color:var(--fg);border-color:var(--line2)}
+.roho-tab.on{color:#1a1207;background:linear-gradient(180deg,#efc862,#e0b84e);border-color:#e0b84e;font-weight:700}
+.roho-pane{display:none;animation:rohoFade .3s ease}
+.roho-pane.on{display:block}
+@keyframes rohoFade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+/* 序文（横書き・料紙見立て） */
+.roho-doc{position:relative;border:1px solid #4a4130;border-radius:6px;
+  background:linear-gradient(180deg,rgba(60,52,36,.32),rgba(40,35,24,.22));
+  padding:24px 22px 20px;box-shadow:inset 0 0 0 1px rgba(224,184,78,.10)}
+.roho-doc::before{content:"";position:absolute;left:9px;right:9px;top:9px;bottom:9px;
+  border:1px solid rgba(224,184,78,.18);border-radius:3px;pointer-events:none}
+.roho-doc-title{text-align:center;font-family:"Shippori Mincho",serif;font-weight:700;
+  font-size:23px;letter-spacing:.4em;color:#efd8a0;margin:2px 0 4px;text-indent:.4em}
+.roho-doc-rule{width:40px;height:1px;background:#c0473a;margin:8px auto 18px;position:relative}
+.roho-doc-rule::before,.roho-doc-rule::after{content:"";position:absolute;top:-1.5px;width:4px;height:4px;border-radius:50%;background:#c0473a}
+.roho-doc-rule::before{left:-6px}.roho-doc-rule::after{right:-6px}
+.roho-doc-body p{font-family:"Shippori Mincho",serif;font-size:14.5px;line-height:2.0;
+  letter-spacing:.045em;color:var(--fg);text-align:justify;margin:0 0 12px}
+.roho-doc-foot{display:flex;align-items:flex-end;justify-content:flex-end;gap:12px;margin-top:8px}
+.roho-doc-sign{font-family:"Shippori Mincho",serif;font-size:13.5px;letter-spacing:.14em;color:var(--fg-dim)}
+.roho-seal{width:44px;height:44px;flex:0 0 auto;border:2px solid #c0473a;border-radius:5px;
+  display:grid;place-items:center;color:#d3574a;font-family:"Shippori Mincho",serif;font-weight:700;
+  font-size:13px;line-height:1.05;writing-mode:vertical-rl;letter-spacing:.04em;
+  background:rgba(192,71,58,.07);box-shadow:0 0 0 2px rgba(192,71,58,.10)}
+
+.roho-yomi-btn{display:block;margin:16px auto 0;font-family:"Shippori Mincho",serif;font-size:12.5px;
+  letter-spacing:.1em;color:#e0b84e;background:none;border:1px solid rgba(224,184,78,.5);
+  padding:7px 18px;border-radius:20px;cursor:pointer;transition:.15s}
+.roho-yomi-btn:hover{background:rgba(224,184,78,.08)}
+.roho-yomi-row{display:flex;gap:8px;justify-content:center;margin-top:16px;flex-wrap:wrap}
+.roho-yomi-row .roho-yomi-btn{margin:0;flex:1 1 auto;min-width:130px;max-width:190px}
+.roho-yomi-btn.on{background:rgba(224,184,78,.14);color:#efd8a0;border-color:#e0b84e}
+.roho-yomi{display:none;margin-top:14px;padding:15px 16px;border:1px solid var(--line);border-radius:6px;
+  background:rgba(255,255,255,.02)}
+.roho-yomi.on{display:block}
+.roho-yomi h4{font-size:11px;letter-spacing:.16em;color:var(--fg-faint);margin:0 0 8px;font-weight:600}
+.roho-yomi p{font-family:"Shippori Mincho",serif;font-size:13px;line-height:1.95;letter-spacing:.01em;
+  color:var(--fg-dim);margin:0 0 10px}
+
+/* 開発者について */
+.roho-about{text-align:center;padding:6px 2px 2px}
+.roho-ava-ring{display:inline-block;padding:5px;border-radius:50%;margin-bottom:14px;
+  background:conic-gradient(from 210deg,#e0b84e,#6a5a34,#c0473a 62%,#e0b84e)}
+.roho-ava{width:118px;height:118px;border-radius:50%;object-fit:cover;display:block;
+  border:2px solid #2a2418;box-shadow:0 8px 22px -8px rgba(0,0,0,.7)}
+.roho-name{font-family:"Shippori Mincho",serif;font-weight:700;font-size:25px;letter-spacing:.16em;color:var(--fg)}
+.roho-kana{font-size:11.5px;letter-spacing:.24em;color:var(--fg-dim);margin-top:5px}
+.roho-en{font-size:10.5px;letter-spacing:.28em;color:#e0b84e;margin-top:5px;text-transform:uppercase}
+.roho-about .roho-doc-rule{margin:18px auto}
+.roho-bio{border:1px dashed var(--line2);border-radius:6px;padding:18px 16px;background:rgba(255,255,255,.02);text-align:left}
+.roho-bio .lead{font-family:"Shippori Mincho",serif;font-size:13.5px;line-height:1.95;color:var(--fg);letter-spacing:.03em;margin:0}
+.roho-bio .note{margin:12px 0 0;padding-top:11px;border-top:1px solid var(--line);
+  font-size:11px;line-height:1.7;color:var(--fg-faint);letter-spacing:.02em}
+.roho-meta{margin-top:16px;border:1px solid var(--line);border-radius:8px;overflow:hidden;text-align:left}
+.roho-meta div{display:flex;padding:11px 15px;font-size:13px;letter-spacing:.03em}
+.roho-meta div+div{border-top:1px solid var(--line)}
+.roho-meta div span{flex:0 0 70px;color:#e0b84e;font-family:"Shippori Mincho",serif;letter-spacing:.14em}
+.roho-meta div b{font-weight:500;color:var(--fg);font-family:"Shippori Mincho",serif}
+.roho-desc{font-family:"Shippori Mincho",serif;font-size:12.5px;line-height:1.8;color:var(--fg);letter-spacing:.06em;text-align:center;margin:0 0 6px}
+.roho-born{font-size:11px;line-height:1.7;color:var(--fg-faint);letter-spacing:.03em;text-align:center;margin:0 0 16px}
+.roho-chrono{width:100%;border-collapse:collapse;border:1px solid var(--line);border-radius:8px;overflow:hidden;font-family:"Shippori Mincho",serif;display:table}
+.roho-chrono thead td{background:rgba(224,184,78,.10);color:#e0b84e;font-size:10.5px;letter-spacing:.18em;text-align:center;padding:7px 8px;font-weight:700}
+.roho-chrono tbody td{border-top:1px solid var(--line);padding:9px 12px;vertical-align:top}
+.roho-chrono .yr{white-space:nowrap;width:1%;border-right:1px solid var(--line);background:rgba(255,255,255,.02);
+  color:#e0b84e;font-size:12.5px;letter-spacing:.05em}
+.roho-chrono .yr small{display:block;color:var(--fg-faint);font-size:9.5px;letter-spacing:.06em;margin-top:2px;font-family:"Space Mono",monospace}
+.roho-chrono .ev{font-size:12.5px;line-height:1.7;color:var(--fg);letter-spacing:.02em}
+.roho-chrono .ev span{display:block;color:var(--fg-dim);font-size:11px;margin-top:3px;letter-spacing:.02em}
+.roho-links{margin-top:16px;display:flex;flex-direction:column;gap:8px}
+.roho-link{display:flex;align-items:center;gap:10px;padding:11px 13px;border:1px solid var(--line);border-radius:9px;
+  background:rgba(255,255,255,.02);color:var(--fg);text-decoration:none;font-size:12.5px;letter-spacing:.02em;transition:.15s}
+.roho-link:hover{border-color:#e0b84e;color:#efd8a0}
+.roho-link .lk{flex:0 0 auto;width:26px;height:26px;border-radius:6px;display:grid;place-items:center;
+  background:#111;color:var(--fg);font-weight:700;font-family:"Space Mono",monospace;font-size:14px}
+.roho-link .lb{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.roho-link .arw{margin-left:auto;color:var(--fg-faint)}
+</style>
 </head>
 <body data-season="spring">
 <div class="wrap">
@@ -919,6 +1003,10 @@ button.kh-row:hover{border-color:var(--acc)}
     <button class="set-diag" id="about-btn" type="button">ℹ このアプリについて</button>
     <div class="set-saved" style="font-size:10.5px">バージョン・参考文献・免責事項・プライバシーポリシー。</div>
     <div class="set-saved" style="font-size:10.5px">パソコンではキーボード操作ができます（<span class="mono">?</span> キーで一覧）。</div>
+
+    <div class="set-head" style="margin-top:12px"><span class="set-avatar">序</span><span class="set-title">制作者について</span></div>
+    <button class="set-diag" id="seisaku-btn" type="button">序 制作者について</button>
+    <div class="set-saved" style="font-size:10.5px">萬年時計序文（暦法序）と、制作者・大久保路保について。</div>
   </div>
 
   <div id="manualcalc-modal" class="finder-modal" hidden>
@@ -932,6 +1020,87 @@ button.kh-row:hover{border-color:var(--acc)}
     <div class="finder-card">
       <div class="finder-head"><span>ℹ このアプリについて</span><button class="finder-x" id="about-close" aria-label="閉じる">×</button></div>
       <div class="help-body" id="about-body"></div>
+    </div>
+  </div>
+
+  <div id="seisaku-modal" class="finder-modal" hidden>
+    <div class="finder-card">
+      <div class="finder-head"><span>制作者について</span><button class="finder-x" id="seisaku-close" aria-label="閉じる">×</button></div>
+      <div class="help-body">
+        <div class="roho-tabs">
+          <button class="roho-tab on" data-pane="jobun" type="button">萬年時計序文</button>
+          <button class="roho-tab" data-pane="about" type="button">開発者について</button>
+        </div>
+
+        <div class="roho-pane on" id="roho-pane-jobun">
+          <div class="roho-doc">
+            <div class="roho-doc-title">暦法序</div>
+            <div class="roho-doc-rule"></div>
+            <div class="roho-doc-body">
+              <p>暦者、國家之大基也。故萬國諸皇、欲治平天下、必先正暦法。夫稽尚書、陶唐命羲和、暦象日月星辰、敬授人時、以親黎民。有虞夏禹繼其徳、齊河海之洪濤、平定九州。亦割月分節、立二十有四氣、使民易測農事之春秋。商賈用八卦、卜日之吉凶、興業本乎四時之風。此俗浸潤民間、暦注終齎榮盛。</p>
+              <p>於本朝、天智帝知其效用、大化改新之後、始置漏刻、設圭表、以潤民地。西京遷都以來、諸公卿大親之、以風水建寺社。然而近世、徳川公儀稍覺古暦之有誤謬。暦爲民之所常用、故世俗窮而混迷。貞享之時、施行新暦、一時與民安定。</p>
+              <p>方今其習見忘、洋風勝於社會。民迷所嚮、不復知克明俊徳之道。故余稽古之暦、製此萬年時計、欲助民明其明徳。庶幾民樂安寧、國威永康。是士夫之本義也。</p>
+            </div>
+            <div class="roho-doc-foot">
+              <div class="roho-doc-sign">令和八年　大久保路保　謹識</div>
+              <div class="roho-seal">路保</div>
+            </div>
+          </div>
+          <div class="roho-yomi-row">
+            <button class="roho-yomi-btn" id="roho-yomi-btn" type="button">書き下し文を見る</button>
+            <button class="roho-yomi-btn" id="roho-modern-btn" type="button">現代語訳を見る</button>
+          </div>
+          <div class="roho-yomi" id="roho-yomi">
+            <h4>暦法序 —— よみくだし</h4>
+            <p>暦は、国家の大基なり。故に万国の諸皇、天下を治平せんと欲さば、必ず先づ暦法を正す。</p>
+            <p>夫れ尚書を稽ふるに、陶唐 羲和に命じ、日月星辰を暦象し、敬みて人時を授け、以て黎民を親しましむ。有虞・夏禹 其の徳を継ぎ、河海の洪濤を斉へて、九州を平定す。亦た月を割きて節を分かち、二十有四気を立て、民をして農事の春秋を測り易からしむ。商賈は八卦を用ゐ、日の吉凶を卜し、業を興すこと四時の風に本づく。此の俗 民間に浸潤し、暦注 終に栄盛を齎す。</p>
+            <p>本朝に於て、天智帝 其の効用を知り、大化改新の後、始めて漏刻を置き、圭表を設け、以て民地を潤す。西京遷都以来、諸公卿 大いに之を親しみ、風水を以て寺社を建つ。然れども近世、徳川公儀 稍く古暦の誤謬有るを覚る。暦は民の常用する所と為す、故に世俗 窮して混迷す。貞享の時、新暦を施行し、一時 民と安定す。</p>
+            <p>方今 其の習ひ忘れられ、洋風 社会に勝る。民 嚮ふ所に迷ひ、復た克明俊徳の道を知らず。故に余 古の暦を稽へ、此の萬年時計を製し、民の其の明徳を明らかにするを助けんと欲す。庶幾はくは民 安寧を楽しみ、国威 永く康からんことを。是れ士夫の本義なり。</p>
+          </div>
+          <div class="roho-yomi" id="roho-modern">
+            <h4>暦法序 —— 現代語訳</h4>
+            <p>暦とは、国家を支える最も重要な基盤である。ゆえに古今東西の君主たちは、天下をよく治めようとするなら、まず暦法を正すことから始めた。</p>
+            <p>『書経』をひもとけば、堯帝は羲氏・和氏に命じて、日・月・星辰の運行を観測させ、それによって時節を人民に正しく授け、人々の暮らしを安定させた。続く舜や夏の禹王もその徳を受け継ぎ、黄河の大洪水を治め、天下を平定した。また、一年を節に分け、二十四節気を定めることで、人々が農作業の時期を容易に知ることができるようにした。商人たちは八卦を用いて日の吉凶を占い、商いは四季の巡りを基礎として栄えた。このような風習は広く民間へ浸透し、暦注（暦に記された吉凶や季節の情報）は、ついには繁栄をもたらしたのである。</p>
+            <p>我が国においても、天智天皇はその有用性を理解し、大化の改新の後に漏刻（水時計）を設け、圭表（日影を測る器具）を置いて、人々の生活を豊かにした。平城京・平安京への遷都以来、公卿たちは暦を重んじ、風水の理に従って寺社を建立した。しかし近世になると、徳川幕府は古い暦に誤りがあることを認識した。暦は民衆が日常的に用いるものであるから、その誤りは世の人々を混乱させることとなった。そこで貞享年間に新しい暦が施行され、人々の暮らしは再び安定したのである。</p>
+            <p>ところが今日では、そのような伝統は忘れられ、西洋の風俗や思想が社会に優勢となっている。人々は進むべき道に迷い、『大学』のいう「明徳を明らかにする」道を知ることが少なくなった。</p>
+            <p>そこで私は古来の暦を研究し、この『萬年時計』を製作した。これによって人々が自らの明徳を明らかにする助けとなることを願う。願わくは、人々が安らかに暮らし、国家の威光が末永く栄えることを。それこそが、士たる者の果たすべき本分なのである。</p>
+          </div>
+        </div>
+
+        <div class="roho-pane" id="roho-pane-about">
+          <div class="roho-about">
+            <span class="roho-ava-ring"><img class="roho-ava" id="roho-ava" src="assets/roho-avatar.jpg" alt="大久保路保"></span>
+            <div class="roho-name">大久保路保</div>
+            <div class="roho-kana">おおくぼ　みちやす</div>
+            <div class="roho-en">Okubo Michiyasu</div>
+            <div class="roho-doc-rule"></div>
+            <p class="roho-desc">漢学者 ・ 和算家 ・ 日英通訳者 ・ 絵師 ・ 外交官</p>
+            <p class="roho-born">大阪府西成郡成小路村字十三 出身<br>1867年〈慶應三年〉4月22日 — 1905年〈明治三十八年〉1月22日</p>
+            <table class="roho-chrono">
+              <thead><tr><td>年代</td><td>事跡</td></tr></thead>
+              <tbody>
+                <tr><td class="yr">慶応三年<small>1867</small></td><td class="ev">四月二十二日、路保 出生</td></tr>
+                <tr><td class="yr">明治六年<small>1873</small></td><td class="ev">大阪府西成郡成小路村小学校に入学</td></tr>
+                <tr><td class="yr">明治十年<small>1877</small></td><td class="ev">西南戦争により、父と死別</td></tr>
+                <tr><td class="yr">明治十二年<small>1879</small></td><td class="ev">鷺嶋神社の集会（後の鷺嶋堂）を開く<span>漢学・算術を教授</span></td></tr>
+                <tr><td class="yr">明治十三年<small>1880</small></td><td class="ev">大阪府立中学校へ入学</td></tr>
+                <tr><td class="yr">明治十四年<small>1881</small></td><td class="ev">川口居留地の聖公会系教会にて英語を学ぶ</td></tr>
+                <tr><td class="yr">明治十六年<small>1883</small></td><td class="ev">大阪府立中学校を中退し、上京</td></tr>
+                <tr><td class="yr">明治十七年<small>1884</small></td><td class="ev">大学予備門（後の第一高等中学校）に合格</td></tr>
+                <tr><td class="yr">明治十八年<small>1885</small></td><td class="ev">淀川洪水に被災</td></tr>
+              </tbody>
+            </table>
+            <div class="roho-links">
+              <a class="roho-link" href="https://x.com/doubleroads13" target="_blank" rel="noopener">
+                <span class="lk">X</span><span class="lb">大久保路保（@doubleroads13）</span><span class="arw">▸</span>
+              </a>
+              <a class="roho-link" href="https://www.threads.com/@mannen_dokei" target="_blank" rel="noopener">
+                <span class="lk">@</span><span class="lb">萬年時計（@mannen_dokei）</span><span class="arw">▸</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -4746,6 +4915,38 @@ document.getElementById('geo').onclick=()=>{
   btn.addEventListener('click',()=>{ modal.hidden=false; });
   bindModalClose(modal,close);
 })();
+/* ====================== 制作者について（暦法序・開発者） ====================== */
+(function(){
+  const btn=document.getElementById('seisaku-btn');
+  const modal=document.getElementById('seisaku-modal');
+  const close=document.getElementById('seisaku-close');
+  if(!btn||!modal)return;
+  // タブ切替
+  modal.querySelectorAll('.roho-tab').forEach(t=>{
+    t.addEventListener('click',()=>{
+      modal.querySelectorAll('.roho-tab').forEach(x=>x.classList.remove('on'));
+      modal.querySelectorAll('.roho-pane').forEach(x=>x.classList.remove('on'));
+      t.classList.add('on');
+      const p=document.getElementById('roho-pane-'+t.dataset.pane);
+      if(p)p.classList.add('on');
+    });
+  });
+  // 書き下し文・現代語訳トグル
+  const yb=document.getElementById('roho-yomi-btn'), yomi=document.getElementById('roho-yomi');
+  if(yb&&yomi)yb.addEventListener('click',()=>{
+    yomi.classList.toggle('on');
+    yb.textContent=yomi.classList.contains('on')?'書き下し文を閉じる':'書き下し文を見る';
+    yb.classList.toggle('on',yomi.classList.contains('on'));
+  });
+  const mb=document.getElementById('roho-modern-btn'), modern=document.getElementById('roho-modern');
+  if(mb&&modern)mb.addEventListener('click',()=>{
+    modern.classList.toggle('on');
+    mb.textContent=modern.classList.contains('on')?'現代語訳を閉じる':'現代語訳を見る';
+    mb.classList.toggle('on',modern.classList.contains('on'));
+  });
+  btn.addEventListener('click',()=>{ modal.hidden=false; });
+  bindModalClose(modal,close);
+})();
 (function(){
   let shown=false;
   const show=()=>{ if(shown)return; shown=true; const t=document.getElementById('err-toast'); if(t)t.hidden=false; };
@@ -4755,7 +4956,7 @@ document.getElementById('geo').onclick=()=>{
 })();
 /* ====================== 端末の戻るボタン＝モーダルを閉じる（アプリ終了しない） ====================== */
 (function(){
-  const IDS=['help-modal','finder-modal','sekki-modal','memolist-modal','favlist-modal'];
+  const IDS=['help-modal','finder-modal','sekki-modal','memolist-modal','favlist-modal','seisaku-modal','about-modal'];
   const els=IDS.map(id=>document.getElementById(id)).filter(Boolean);
   const anyOpen=()=>els.some(e=>!e.hidden);
   const closeAll=()=>els.forEach(e=>{ if(!e.hidden)e.hidden=true; });
