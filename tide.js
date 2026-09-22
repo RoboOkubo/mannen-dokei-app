@@ -96,7 +96,7 @@ function _tideExtremes(cx){
 }
 function renderTide(){
   const el=document.getElementById('tide'); if(!el||typeof sel==='undefined')return;
-  if(document.body.dataset.view && document.body.dataset.view!=='koyomi')return;  // 暦ビュー以外では描かない
+  if(document.body.dataset.view && document.body.dataset.view!=='sora')return;  // 天ビュー以外では描かない
   let selPort=localStorage.getItem('koyomi-tide-port')||'auto';
   const near=_tideNearest();
   const auto=(selPort==='auto'||!TIDE.ports[selPort]);

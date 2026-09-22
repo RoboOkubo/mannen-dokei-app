@@ -1279,21 +1279,7 @@ button.kh-row:hover{border-color:var(--acc)}
             </div>
           </div>
         </section>
-        <div class="almbox">
-          <div class="alm-dateline" id="alm-dateline">—</div>
-          <div class="alm-cells">
-            <div class="alm-cell hap"><div class="alm-t">八節風</div><div class="alm-v" id="alm-wind">—</div></div>
-            <div class="alm-cell rok"><div class="alm-t">六曜</div><div class="alm-v" id="alm-rokuyo">—</div></div>
-            <div class="alm-cell kik"><div class="alm-t">暦注</div>
-              <div class="alm-grp"><span class="alm-grt">中段</span><span class="alm-gv" id="alm-chusan">—</span></div>
-              <div class="alm-grp"><span class="alm-grt">下段</span><span class="alm-gv" id="alm-kichi">—</span></div>
-              <div class="alm-grp"><span class="alm-grt">その他</span><span class="alm-gv" id="alm-other">—</span></div>
-            </div>
-          </div>
-          <div class="kmeter" id="alm-meter"></div>
-          <div class="alm-desc" id="alm-desc" hidden></div>
-          <div class="alm-src">吉凶は『永代大雑書万暦大成』を参考にした<b>一例</b>です。暦注・吉日は流派により解釈が異なります。</div>
-        </div>
+        <div class="tide" id="tide"></div>
       </div>
 
       <div class="clkpanel" id="panel-sun" hidden>
@@ -1461,7 +1447,21 @@ button.kh-row:hover{border-color:var(--acc)}
   <div class="grid v-koyomi" id="grid"></div>
 
   <div class="dayinfo v-koyomi" id="dayinfo"></div>
-  <div class="tide v-koyomi" id="tide"></div>
+  <div class="almbox v-koyomi">
+    <div class="alm-dateline" id="alm-dateline">—</div>
+    <div class="alm-cells">
+      <div class="alm-cell hap"><div class="alm-t">八節風</div><div class="alm-v" id="alm-wind">—</div></div>
+      <div class="alm-cell rok"><div class="alm-t">六曜</div><div class="alm-v" id="alm-rokuyo">—</div></div>
+      <div class="alm-cell kik"><div class="alm-t">暦注</div>
+        <div class="alm-grp"><span class="alm-grt">中段</span><span class="alm-gv" id="alm-chusan">—</span></div>
+        <div class="alm-grp"><span class="alm-grt">下段</span><span class="alm-gv" id="alm-kichi">—</span></div>
+        <div class="alm-grp"><span class="alm-grt">その他</span><span class="alm-gv" id="alm-other">—</span></div>
+      </div>
+    </div>
+    <div class="kmeter" id="alm-meter"></div>
+    <div class="alm-desc" id="alm-desc" hidden></div>
+    <div class="alm-src">吉凶は『永代大雑書万暦大成』を参考にした<b>一例</b>です。暦注・吉日は流派により解釈が異なります。</div>
+  </div>
   <div class="windrec v-kiroku" id="windrec"></div>
   <div class="memo-wrap v-kiroku">
     <div class="memo">
@@ -4141,10 +4141,9 @@ document.getElementById('day-next').onclick=()=>shiftDay(1);
     document.body.dataset.view=v;
     tabs.querySelectorAll('.vtab').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
     if(save){ try{localStorage.setItem('koyomi-view',v);}catch(e){} }
-    // 天（時計）に切り替えたときは、非表示中に崩れないよう再描画
-    if(v==='sora'){ try{ if(viewMode==='sun')renderSundial(); else if(viewMode==='star')renderStarClock(); else if(viewMode==='kkt')renderKikkyo(); else render(); }catch(e){} }
-    // 暦に戻ったときは、非表示中に飛ばした潮汐を描き直す
-    if(v==='koyomi'){ try{ if(typeof renderTide==='function')renderTide(); }catch(e){} }
+    // 天（時計）に切り替えたときは、非表示中に崩れないよう再描画（潮汐も含む）
+    if(v==='sora'){ try{ if(viewMode==='sun')renderSundial(); else if(viewMode==='star')renderStarClock(); else if(viewMode==='kkt')renderKikkyo(); else render();
+      if(typeof renderTide==='function')renderTide(); }catch(e){} }
     window.scrollTo({top:0,behavior:'smooth'});
   }
   tabs.querySelectorAll('.vtab').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.v,true)));
