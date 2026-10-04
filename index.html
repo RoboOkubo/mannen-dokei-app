@@ -599,6 +599,8 @@ select{appearance:none;padding-right:30px}
 .foot{margin-top:30px;padding-top:16px;border-top:1px solid var(--line);
   font-size:12px;color:var(--fg-faint);line-height:1.8}
 .foot b{color:var(--fg-dim);font-weight:600}
+.foot-links{margin-top:12px;display:flex;gap:6px 16px;flex-wrap:wrap}
+.foot-links a{color:var(--fg-dim)}
 
 @media (max-width:680px){
   .hero{grid-template-columns:1fr;gap:22px}
@@ -1515,6 +1517,7 @@ button.kh-row:hover{border-color:var(--acc)}
   <footer class="foot">
     <div id="loc-line"></div>
     <div id="foot-note">太陽黄経が15°進むごとに節気が改まります。<b>昼の長さ</b>の帯は緯度ごとの一年の最短〜最長で正規化。メインの空には<b>太陽の弧</b>に加え、その日の<b>月</b>を実際の高度・方位で描き（当日は現在位置、他日は南中位置）、月の出・月の入りと満ち欠けを示します。<b>月齢</b>は各日の正午（現地）に朔（新月）からの経過日数で算出。日の出・日の入りは大気差を含む近似計算で、実際とは数分前後します。各日には<b>十干十二支（日干支）</b>と<b>八風（はっぷう）</b>を表示します。八風は、立春からの條風（東北）75日間、春分の明庶風（東）・立夏の清明風（東南）・夏至の景風（南）・立秋の涼風（西南）・秋分の閭闔風（西）・立冬の不周風（西北）・冬至の廣莫風（北）が各45日間で、季節の節気と方位に結びついた古来の風です（区間の重なりは新しく始まる風を優先表示。あくまで五穀豊穣や健康の目安で、実際の風は日々・時々で異なります）。各日の<b>メモ</b>はお使いの端末内にのみ保存されます。日時計には江戸の<b>不定時法</b>を表示します。日の出から日の入りまで（明＝昼）と日の入りから日の出まで（暮＝夜）をそれぞれ6等分し、明け六つ（日の出）・明け九つ（正午）・暮れ六つ（日の入り）・暮れ九つ（真夜中）のように数えます（一刻の長さは季節で伸縮します）。<b>土用（どよう）</b>は立春・立夏・立秋・立冬それぞれの直前18日間で、立春前＝冬土用、立夏前＝春土用、立秋前＝夏土用、立冬前＝秋土用です（立の前日が土用明け、立当日は含みません）。各種の<b>吉凶・暦注・吉日</b>は『永代大雑書万暦大成』を参考にした一例で、流派により解釈は異なります。<b>圭表儀</b>の影長は、通常は太陽の幾何学的な高度から計算した理論値です。「大気補正」をオンにすると、気圧・気温を入力して大気差（光が大気で屈折し太陽が実際よりわずかに高く見える効果）を反映した影長に切り替えられます（Bennett, 1982の近似式）。気温は℃・℉・°Ré（レオミュール度）から選べます。「🌤天気から取得」は、選択中の地点の現在の気圧・気温をOpen-Meteo（インターネット通信）から取得します（アプリの他の機能は通信を行いません）。<b>風の記録</b>の「🌬自動取得」は、選んだ日の日の出・日の入り時刻に最も近い時間帯の風向を同じくOpen-Meteoから取得し、16方位に丸めて自動入力します（直近92日前後〜16日先が対象。それより古い日付は気象アーカイブでの取得を試みますが、対応できない場合があります）。いずれも位置情報（選択中の都道府県や現在地）に応じた値を取得します。「現在地」ボタンでは、緯度経度から市区町村名を調べるために OpenStreetMap（Nominatim）とも通信します（取得した座標を送信するのみで、保存はしません）。</div>
+    <div class="foot-links"><a href="/tiktok/">萬年時計だより（TikTok連携）</a><a href="/terms.html">利用規約</a><a href="/privacy.html">プライバシーポリシー</a><a href="mailto:sagishimado@gmail.com">お問い合わせ</a></div>
   </footer>
 </div>
 
@@ -4908,7 +4911,7 @@ document.getElementById('geo').onclick=()=>{
 
     <h3>プライバシー</h3>
     <p>メモ・お気に入り・設定は、すべてお使いの端末内にのみ保存され、外部に送信されません。天気（気圧・気温・風向）の取得時のみ、選択地点の位置情報を気象データ提供元（Open-Meteo）へ送信します。「現在地」ボタンでは、市区町村名を調べるためにOpenStreetMap（Nominatim）にも座標を送信します。いずれも保存は行われません。</p>
-    <p><a href="https://robookubo.github.io/mannen-dokei-privacy/" target="_blank" rel="noopener" style="color:var(--acc)">プライバシーポリシーを開く ▸</a></p>
+    <p><a href="/privacy.html" target="_blank" rel="noopener" style="color:var(--acc)">プライバシーポリシーを開く ▸</a>　<a href="/terms.html" target="_blank" rel="noopener" style="color:var(--acc)">利用規約 ▸</a></p>
 
     <h3>お問い合わせ</h3>
     <p><a href="mailto:sagishimado@gmail.com" style="color:var(--acc)">sagishimado@gmail.com</a></p>

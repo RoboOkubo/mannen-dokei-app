@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>萬年時計だより — TikTok連携 ｜ 萬年時計</title>
+<meta name="description" content="萬年時計の暦情報を毎朝TikTokへ自動投稿する「萬年時計だより」の連携ページ。">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="stylesheet" href="/policy.css">
+<style>
+  .sample{display:block;max-width:240px;width:60%;margin:14px auto;border-radius:10px;box-shadow:0 4px 18px rgba(0,0,0,.18)}
+  .env{font-size:12px;color:#6b6156;margin-top:8px}
+</style>
+</head>
+<body>
+<nav class="site-nav"><a href="/">← 萬年時計</a><a href="/terms.html">利用規約</a><a href="/privacy.html">プライバシーポリシー</a></nav>
+
+<div class="hero">
+  <img src="/pwa-192.png" alt="萬年時計のアイコン">
+  <div>
+    <h1 style="margin:0;border:0;padding:0">萬年時計だより</h1>
+    <div style="color:#6b6156">萬年時計 × TikTok 連携</div>
+  </div>
+</div>
+
+<p>「萬年時計だより」は、<a href="/">萬年時計</a>が算出したその日の暦（六曜・日干支・旧暦・二十四節気・七十二候・暦注・吉凶）を1枚の画像にまとめ、<b>毎朝、連携したTikTokアカウントへ自動で投稿</b>する機能です。運営者のアカウント <b>@mannen_dokei</b> で使用しています。</p>
+
+<img class="sample" src="sample.jpg" alt="投稿される画像の例（2026年9月23日）">
+
+<h2>しくみ</h2>
+<ol>
+  <li>下のボタンから<b>TikTokでログイン</b>し、萬年時計だよりにアクセスを許可します（TikTok Login Kit）。</li>
+  <li>許可したアカウントの<b>表示名・アバター</b>（<code>user.info.basic</code>）で、投稿先が正しいことを確認します。</li>
+  <li>毎朝、当日の暦画像とキャプションを作成し、TikTok Content Posting API の <b>Direct Post</b>（<code>video.publish</code>）でそのアカウントへ投稿します。</li>
+</ol>
+
+<h2>連携する</h2>
+<p><a class="btn" id="connect" href="#">TikTokでログインして連携</a></p>
+<p class="env" id="env-note"></p>
+<p style="font-size:13px">連携はTikTokアプリの「設定とプライバシー → セキュリティと権限 → アプリの権限」からいつでも解除できます。取り扱う情報は<a href="/privacy.html">プライバシーポリシー</a>をご覧ください。</p>
+
+<footer class="site-foot"><span>© 萬年時計</span><a href="/">萬年時計</a><a href="/terms.html">利用規約</a><a href="/privacy.html">プライバシーポリシー</a><a href="mailto:sagishimado@gmail.com">お問い合わせ</a></footer>
+
+<script>
+"use strict";
+(function(){
+  // client_key は公開値（認可URLに含まれる）。?env=sandbox でサンドボックス版を使う
+  const KEYS={production:"aw7h1lstxwulpd03",sandbox:"sbaw2ks38j8q2n2wm3"};
+  const env=new URLSearchParams(location.search).get("env")==="sandbox"?"sandbox":"production";
+  const REDIRECT_URI="https://mannendokei.com/tiktok/callback.html";
+  const SCOPES="user.info.basic,video.publish,video.upload";
+  if(env==="sandbox") document.getElementById("env-note").textContent="（サンドボックス環境で連携します）";
+  document.getElementById("connect").addEventListener("click",e=>{
+    e.preventDefault();
+    const a=new Uint8Array(16); crypto.getRandomValues(a);
+    const state=Array.from(a,b=>b.toString(16).padStart(2,"0")).join("");
+    try{ sessionStorage.setItem("tiktok_state",state); sessionStorage.setItem("tiktok_env",env); }catch(_){}
+    const q=new URLSearchParams({client_key:KEYS[env],scope:SCOPES,response_type:"code",redirect_uri:REDIRECT_URI,state});
+    location.href="https://www.tiktok.com/v2/auth/authorize/?"+q.toString();
+  });
+})();
+</script>
+</body>
+</html>

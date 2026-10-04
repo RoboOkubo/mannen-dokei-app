@@ -1,0 +1,18 @@
+body{max-width:680px;margin:0 auto;padding:40px 20px 80px;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;
+  line-height:1.85;color:#2a2420;background:#F3ECD7}
+h1{font-size:22px;border-bottom:3px solid #8B3A2B;padding-bottom:10px;color:#8B3A2B}
+h2{font-size:16px;margin-top:34px;color:#8B3A2B}
+p{margin:10px 0}
+.updated{color:#6b6156;font-size:13px}
+.box{background:#fffdf8;border:1px solid #d8cdb5;border-radius:10px;padding:16px 18px;margin:16px 0}
+a{color:#8B3A2B}
+.site-nav{font-size:13px;margin-bottom:24px;display:flex;gap:14px;flex-wrap:wrap}
+.site-nav a{text-decoration:none}
+.site-foot{margin-top:48px;padding-top:14px;border-top:1px solid #d8cdb5;font-size:13px;color:#6b6156;display:flex;gap:14px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;background:#111;color:#fff;border:0;border-radius:8px;padding:12px 22px;font-size:15px;font-weight:600;cursor:pointer;text-decoration:none}
+.btn:hover{background:#333}
+.btn.sub{background:#8B3A2B}
+code,.mono{font-family:ui-monospace,Consolas,monospace;font-size:13px;word-break:break-all;background:#fffdf8;border:1px solid #d8cdb5;border-radius:6px;padding:2px 6px}
+.hero{display:flex;gap:18px;align-items:center;margin:8px 0 18px}
+.hero img{width:72px;height:72px;border-radius:14px}
+ol li,ul li{margin:4px 0}

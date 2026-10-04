@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>連携結果 — 萬年時計だより ｜ 萬年時計</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="stylesheet" href="/policy.css">
+</head>
+<body>
+<nav class="site-nav"><a href="/tiktok/">← 萬年時計だより</a><a href="/terms.html">利用規約</a><a href="/privacy.html">プライバシーポリシー</a></nav>
+<h1 id="title">連携結果</h1>
+<div class="box" id="result"></div>
+<div id="next" hidden>
+  <h2>次の手順</h2>
+  <p>この認可コードは有効期限が短いため、すぐに運営者の端末で投稿処理を実行します（アプリのシークレットはWebサイトに置かないため、トークンの取得は運営者の端末でのみ行います）。</p>
+  <p><code id="cmd"></code></p>
+  <p><button class="btn sub" id="copy" type="button">コマンドをコピー</button> <span id="copied" style="font-size:13px;color:#6b6156"></span></p>
+</div>
+<footer class="site-foot"><span>© 萬年時計</span><a href="/">萬年時計</a><a href="/terms.html">利用規約</a><a href="/privacy.html">プライバシーポリシー</a></footer>
+<script>
+"use strict";
+(function(){
+  const p=new URLSearchParams(location.search);
+  const res=document.getElementById("result");
+  const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  let saved=null, env="production";
+  try{ saved=sessionStorage.getItem("tiktok_state"); env=sessionStorage.getItem("tiktok_env")||env; }catch(_){}
+  if(p.get("error")){
+    document.getElementById("title").textContent="連携できませんでした";
+    res.innerHTML="<p>TikTokから次のエラーが返されました：<code>"+esc(p.get("error"))+"</code></p><p>"+esc(p.get("error_description")||"")+"</p><p><a href='/tiktok/'>もう一度試す</a></p>";
+    return;
+  }
+  const code=p.get("code");
+  if(!code){ res.innerHTML="<p>認可コードがありません。<a href='/tiktok/'>連携ページ</a>からやり直してください。</p>"; return; }
+  if(saved && p.get("state")!==saved){
+    document.getElementById("title").textContent="連携できませんでした";
+    res.innerHTML="<p>state が一致しません（不正なリクエストの可能性があります）。<a href='/tiktok/'>連携ページ</a>からやり直してください。</p>";
+    return;
+  }
+  document.getElementById("title").textContent="TikTokの認可が完了しました";
+  res.innerHTML="<p>✅ 萬年時計だよりへのアクセスが許可されました。</p><p>許可されたスコープ：<code>"+esc(p.get("scopes")||"")+"</code></p>";
+  const cmd="python tiktok_connect.py"+(env==="sandbox"?" --sandbox":"")+" \""+code+"\"";
+  document.getElementById("cmd").textContent=cmd;
+  document.getElementById("next").hidden=false;
+  document.getElementById("copy").addEventListener("click",()=>{
+    navigator.clipboard.writeText(cmd).then(()=>{document.getElementById("copied").textContent="コピーしました";});
+  });
+})();
+</script>
+</body>
+</html>
