@@ -50,7 +50,9 @@
   const env=new URLSearchParams(location.search).get("env")==="sandbox"?"sandbox":"production";
   const REDIRECT_URI="https://mannendokei.com/tiktok/callback.html";
   const SCOPES="user.info.basic,video.publish,video.upload";
-  if(env==="sandbox") document.getElementById("env-note").textContent="（サンドボックス環境で連携します）";
+  const note=document.getElementById("env-note");
+  if(env==="sandbox") note.innerHTML='（サンドボックス環境で連携します）　<a href="./">本番環境に戻す</a>';
+  else note.innerHTML='<a href="?env=sandbox">サンドボックス環境で連携する（開発・審査用）</a>';
   document.getElementById("connect").addEventListener("click",e=>{
     e.preventDefault();
     const a=new Uint8Array(16); crypto.getRandomValues(a);
