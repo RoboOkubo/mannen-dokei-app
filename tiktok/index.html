@@ -58,7 +58,7 @@
     const a=new Uint8Array(16); crypto.getRandomValues(a);
     const state=Array.from(a,b=>b.toString(16).padStart(2,"0")).join("");
     try{ sessionStorage.setItem("tiktok_state",state); sessionStorage.setItem("tiktok_env",env); }catch(_){}
-    const q=new URLSearchParams({client_key:KEYS[env],scope:SCOPES,response_type:"code",redirect_uri:REDIRECT_URI,state});
+    const q=new URLSearchParams({client_key:KEYS[env],scope:SCOPES,response_type:"code",redirect_uri:REDIRECT_URI,state,disable_auto_auth:"1"});
     location.href="https://www.tiktok.com/v2/auth/authorize/?"+q.toString();
   });
 })();
