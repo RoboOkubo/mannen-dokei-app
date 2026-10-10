@@ -15,7 +15,16 @@
 <div class="box" id="result"></div>
 <div id="next" hidden>
   <h2>次の手順</h2>
-  <p>この認可コードは有効期限が短いため、すぐに運営者の端末で投稿処理を実行します（アプリのシークレットはWebサイトに置かないため、トークンの取得は運営者の端末でのみ行います）。</p>
+  <p>この認可コードは有効期限が短いため、すぐに運営者側で連携処理を実行します（アプリのシークレットはWebサイトに置かないため、トークンの取得は運営者の環境でのみ行います）。</p>
+  <div id="cloud">
+    <h3>スマホで再連携（運営者用）</h3>
+    <p>1. 認可コードをコピー → 2. 「TikTok再連携」ワークフローを開き、Run workflow に貼り付けて実行</p>
+    <p><code id="code"></code></p>
+    <p><button class="btn sub" id="copycode" type="button">認可コードをコピー</button>
+       <a class="btn" href="https://github.com/RoboOkubo/mannendokei-threads-bot/actions/workflows/tiktok-reconnect.yml" target="_blank" rel="noopener">ワークフローを開く</a>
+       <span id="copiedcode" style="font-size:13px;color:#6b6156"></span></p>
+  </div>
+  <h3>パソコンで実行する場合</h3>
   <p><code id="cmd"></code></p>
   <p><button class="btn sub" id="copy" type="button">コマンドをコピー</button> <span id="copied" style="font-size:13px;color:#6b6156"></span></p>
 </div>
@@ -44,6 +53,11 @@
   res.innerHTML="<p>✅ 萬年時計だよりへのアクセスが許可されました。</p><p>許可されたスコープ：<code>"+esc(p.get("scopes")||"")+"</code></p>";
   const cmd="python tiktok_connect.py"+(env==="sandbox"?" --sandbox":"")+" \""+code+"\"";
   document.getElementById("cmd").textContent=cmd;
+  document.getElementById("code").textContent=code;
+  if(env==="sandbox") document.getElementById("cloud").hidden=true;
+  document.getElementById("copycode").addEventListener("click",()=>{
+    navigator.clipboard.writeText(code).then(()=>{document.getElementById("copiedcode").textContent="コピーしました";});
+  });
   document.getElementById("next").hidden=false;
   document.getElementById("copy").addEventListener("click",()=>{
     navigator.clipboard.writeText(cmd).then(()=>{document.getElementById("copied").textContent="コピーしました";});
