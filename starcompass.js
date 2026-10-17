@@ -113,7 +113,7 @@
       mount.innerHTML=`<div class="stc-box"><div class="stc-row">
         <span class="stc-title">✦ 方位</span>
         <button class="stc-btn" id="stc-start">${needsPerm?'タップして開始':'開始'}</button></div>
-        <div class="stc-sub">端末を立てて構えると、方位が流れるコンパスが動きます。「北」が中央に来たら正面が北。真北基準（偏角 西${dms(declination())}補正）。</div></div>`;
+        <div class="stc-sub">端末を立てて構えると、方位が流れるコンパスが動きます。「北」が中央に来たら正面が北。真北基準（偏角 西${dms(declination())}補正）。開始時に位置情報の利用を求めます（場所に合わせて偏角を補正するため）。</div></div>`;
       const b=document.getElementById('stc-start'); if(b)b.onclick=start;
     } else if(state==='nosensor'){
       const {alt,fists}=fistText();
@@ -189,6 +189,15 @@
         .then(r=>{ if(r==='granted')go(); else render('denied'); })
         .catch(()=>render('denied'));
     } else go();
+    askLocation();   // iOSの方位許可（requestPermission）を先に呼んでから、同じタップ内で位置情報の許可を求める
+  }
+
+  // 偏角（磁北→真北の補正）は場所で変わるため、開始時に位置情報の利用を求める。
+  // ページ上部の「現在地」ボタンと同じ処理を使い、地点・地点名もそろえて更新する。
+  function askLocation(){
+    try{ if(typeof place!=='undefined'&&place&&place.geo)return; }catch(e){}   // 取得済みなら聞かない
+    const g=document.getElementById('geo');
+    if(g && navigator.geolocation) g.click();
   }
 
   render(hasSensor?'idle':'nosensor');
