@@ -138,20 +138,35 @@
     }
   }
 
+  // alpha/beta/gamma（Z-X'-Y''）から「正面」の方位を求める。360-alpha は端末を平らに置いた時しか正しくなく、
+  // 立てて構えると左右の傾きや画面の縦横で大きく（90°以上）ずれるため、回転行列から直接計算する。
+  // ・平らに近い時：画面の上端が向く方向　・立てた時：背面（カメラ）が向く方向　を傾きに応じて切り替える
+  function headingFromEuler(a,b,g,scr){
+    const R=Math.PI/180, cA=Math.cos(a*R),sA=Math.sin(a*R),cB=Math.cos(b*R),sB=Math.sin(b*R),cG=Math.cos(g*R),sG=Math.sin(g*R);
+    const xE=cA*cG-sA*sB*sG, xN=sA*cG+cA*sB*sG;    // 端末x軸（右）の水平成分 [東,北]
+    const yE=-sA*cB,          yN=cA*cB;              // 端末y軸（上端）
+    const bE=-cA*sG-sA*sB*cG, bN=-sA*sG+cA*sB*cG;   // 背面（-z）
+    const cS=Math.cos(scr*R), sS=Math.sin(scr*R);    // 画面の回転（横持ち）に合わせた「画面の上」
+    const uE=cS*yE+sS*xE, uN=cS*yN+sS*xN;
+    const w=Math.pow(cB*cG,4);                        // 画面の法線の鉛直成分^4：平ら≈1、立てる≈0（立てた時は背面方向だけを使う）
+    const E=w*uE+bE, N=w*uN+bN;
+    return ((Math.atan2(E,N)/R)%360+360)%360;
+  }
+
   function onOrient(e){
     // 星時計パネルが隠れている間は描かない（電池と処理の節約）
     const panel=document.getElementById('panel-star');
     if(panel && panel.hidden)return;
     // 絶対方位のみ採用。相対値（起動時の向き基準）は北を指さないため、針を出さず正直に案内する
+    let scr=0; try{scr=(screen.orientation&&screen.orientation.angle)||window.orientation||0;}catch(_){}
     let hMag=null;
-    if(e.webkitCompassHeading!=null) hMag=e.webkitCompassHeading;          // iOS：磁方位
-    else if(e.absolute===true && e.alpha!=null) hMag=(360-e.alpha)%360;     // Android：絶対alpha
+    if(e.webkitCompassHeading!=null) hMag=e.webkitCompassHeading + scr;    // iOS：磁方位
+    else if(e.absolute===true && e.alpha!=null) hMag=headingFromEuler(e.alpha,e.beta||0,e.gamma||0,scr);   // Android：絶対方位
     if(hMag==null){
       if(!onOrient._warned){ onOrient._warned=true; render('nosensor'); }
       return;
     }
-    let scr=0; try{scr=(screen.orientation&&screen.orientation.angle)||window.orientation||0;}catch(_){}
-    const hTrue=hMag - declination() + scr;
+    const hTrue=hMag - declination();
     // 円環スムージング（359↔0の跳ねを sin/cos 平均で回避）
     const r=hTrue*Math.PI/180;
     if(!smoothing)smoothing={s:Math.sin(r),c:Math.cos(r)};
