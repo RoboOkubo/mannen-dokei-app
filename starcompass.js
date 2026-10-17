@@ -12,6 +12,7 @@
   const css=document.createElement('style');
   css.textContent=`
   #starcompass{max-width:560px;margin:10px auto 4px}
+  #starcompass::before{content:'▲';display:block;text-align:center;color:#e0483e;font-size:26px;line-height:1;margin-bottom:4px}   /* 端末の上端＝計測の基準方向 */
   .stc-box{border:1px solid var(--line,#2d3548);border-radius:12px;padding:10px 14px;background:rgba(255,255,255,.02)}
   .stc-row{display:flex;align-items:center;gap:12px}
   .stc-title{font-family:"Shippori Mincho",serif;font-weight:700;font-size:14px;color:#e0b84e;letter-spacing:.03em}
@@ -22,20 +23,47 @@
     font-weight:700;cursor:pointer;font-family:"Shippori Mincho",serif;white-space:nowrap}
   .stc-tape{margin-top:9px}
   .stc-tape svg{width:100%;height:auto;display:block}
+  #stc-clock{max-width:560px;margin:8px auto 4px}
+  #stc-clock .stc-box{padding:12px 14px 16px}
+  .stc-time{text-align:center;margin-top:6px;font-family:"Space Mono",ui-monospace,monospace;font-size:38px;font-weight:700;color:#e2e7f3;letter-spacing:.04em;line-height:1.2}
+  .stc-time .s{font-size:24px;color:#c4cbd9;margin-left:2px}
+  .stc-place{font-size:11.5px;color:#9aa3b4}
   .stc-on .stc-title{color:#8fbf7b}
   .stc-on .stc-box{border-color:rgba(143,191,123,.55);box-shadow:0 0 14px rgba(143,191,123,.10) inset}
   `;
   document.head.appendChild(css);
+
+  // --- 方位の下の時計（地点のタイムゾーンで 時:分:秒 を毎秒表示） ---
+  const clock=document.createElement('div');
+  clock.id='stc-clock';
+  clock.innerHTML=`<div class="stc-box"><div class="stc-row">
+    <span class="stc-title">✦ 時計</span><span class="stc-place" id="stc-cplace"></span></div>
+    <div class="stc-time" id="stc-ctime">--:--<span class="s">:--</span></div></div>`;
+  mount.insertAdjacentElement('afterend',clock);
+  function tickClock(){
+    const panel=document.getElementById('panel-star');
+    if(panel && panel.hidden)return;
+    let tz=9,name='';
+    try{ if(typeof place!=='undefined'&&place){ if(place.tz!=null)tz=place.tz; name=place.name||''; } }catch(e){}
+    const d=new Date(Date.now()+tz*3600000), p2=n=>String(n).padStart(2,'0');
+    document.getElementById('stc-ctime').innerHTML=`${p2(d.getUTCHours())}:${p2(d.getUTCMinutes())}<span class="s">:${p2(d.getUTCSeconds())}</span>`;
+    document.getElementById('stc-cplace').textContent=name;
+  }
+  tickClock(); setInterval(tickClock,250);
 
   function latlng(){ let lat=35.7,lng=139.7;
     try{ if(typeof place!=='undefined'&&place&&place.lat!=null){lat=place.lat;lng=place.lng;} }catch(e){}
     return [lat,lng]; }
   function declination(){ const [lat,lng]=latlng();
     return 7.619 + 0.3125*(lat-37) - 0.1127*(lng-138); }   // 国土地理院近似式（西偏・度）
+  // 度→「度・分・秒」表記（例 35°41′22″）
+  function dms(v){ let t=Math.round(Math.abs(v)*3600)%1296000;   // 360°ちょうどは0°に
+    const d=Math.floor(t/3600), m=Math.floor(t%3600/60), sec=t%60;
+    return `${d}°${String(m).padStart(2,'0')}′${String(sec).padStart(2,'0')}″`; }
   function fistText(){ const [lat]=latlng();
     const f=Math.round(lat/10*2)/2;   // こぶし1つ≈10°
     const n=Number.isInteger(f)?String(f):String(Math.floor(f))+'つ半';
-    return {alt:Math.round(lat), fists:Number.isInteger(f)?`${f}つ`:`${n}`}; }
+    return {alt:dms(lat), fists:Number.isInteger(f)?`${f}つ`:`${n}`}; }
 
   // --- 水平テープSVG。heading=端末正面の真方位（0=北,90=東） ---
   const W=520,H=64,CX=W/2;
@@ -75,36 +103,36 @@
     const off=((heading+180)%360+360)%360-180;   // -180..180（0=北）
     const {alt,fists}=fistText();
     if(Math.abs(off)<=10)
-      return {aligned:true, txt:`正面が北です。そのまま <b>約${alt}°</b> 見上げると北極星 — 地平線からこぶし<b>${fists}</b>ぶん上。北斗七星はその周りを回っています。`};
+      return {aligned:true, txt:`正面が北です。そのまま <b>約${alt}</b> 見上げると北極星 — 地平線からこぶし<b>${fists}</b>ぶん上。北斗七星はその周りを回っています。`};
     const side=off>0?'左':'右';
-    return {aligned:false, txt:`${side}へ ${Math.abs(off).toFixed(0)}° 回ると北を向きます。`};
+    return {aligned:false, txt:`${side}へ ${dms(off)} 回ると北を向きます。`};
   }
 
   function render(state,heading){
     if(state==='idle'){
       mount.innerHTML=`<div class="stc-box"><div class="stc-row">
-        <span class="stc-title">✦ 北をさがす</span>
+        <span class="stc-title">✦ 方位</span>
         <button class="stc-btn" id="stc-start">${needsPerm?'タップして開始':'開始'}</button></div>
-        <div class="stc-sub">端末を立てて構えると、方位が流れるコンパスが動きます。「北」が中央に来たら正面が北。真北基準（偏角 西${declination().toFixed(1)}°補正）。</div></div>`;
+        <div class="stc-sub">端末を立てて構えると、方位が流れるコンパスが動きます。「北」が中央に来たら正面が北。真北基準（偏角 西${dms(declination())}補正）。</div></div>`;
       const b=document.getElementById('stc-start'); if(b)b.onclick=start;
     } else if(state==='nosensor'){
       const {alt,fists}=fistText();
       mount.innerHTML=`<div class="stc-box"><div class="stc-row">
-        <span class="stc-title">✦ 北をさがす</span>
+        <span class="stc-title">✦ 方位</span>
         <button class="stc-btn" id="stc-demo">デモを見る</button></div>
-        <div class="stc-sub">この端末では方位センサーを利用できません（実機のHTTPS環境で動作します）。北を向いたら、地平線からこぶし${fists}ぶん（約${alt}°）見上げた高さに北極星があります。</div></div>`;
+        <div class="stc-sub">この端末では方位センサーを利用できません（実機のHTTPS環境で動作します）。北を向いたら、地平線からこぶし${fists}ぶん（約${alt}）見上げた高さに北極星があります。</div></div>`;
       const b=document.getElementById('stc-demo'); if(b)b.onclick=demo;
     } else if(state==='denied'){
       mount.innerHTML=`<div class="stc-box"><div class="stc-row">
-        <span class="stc-title">✦ 北をさがす</span>
+        <span class="stc-title">✦ 方位</span>
         <button class="stc-btn" id="stc-start">再試行</button></div>
         <div class="stc-sub">方位センサーの利用が許可されませんでした。ブラウザの設定から許可すると使えます。</div></div>`;
       const b=document.getElementById('stc-start'); if(b)b.onclick=start;
     } else {
       const gd=guidance(heading);
       mount.innerHTML=`<div class="${gd.aligned?'stc-on':''}"><div class="stc-box">
-        <div class="stc-row"><span class="stc-title">${gd.aligned?'✓ 正面が北':'✦ 北をさがす'}</span>
-        <span class="stc-sub" style="margin:0 0 0 auto">向き <span class="stc-deg">${(((heading%360)+360)%360)|0}°</span></span></div>
+        <div class="stc-row"><span class="stc-title">${gd.aligned?'✓ 正面が北':'✦ 方位'}</span>
+        <span class="stc-sub" style="margin:0 0 0 auto">向き <span class="stc-deg">${dms(((heading%360)+360)%360)}</span></span></div>
         <div class="stc-tape">${tapeSVG(heading,gd.aligned)}</div>
         <div class="stc-sub">${gd.txt}</div></div></div>`;
     }
